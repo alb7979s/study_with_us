@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "authority")
 @Getter
 @Builder
-public class    Authority {
+public class Authority {
 
     @Id
     @Column(name = "authority_name", length = 50)
