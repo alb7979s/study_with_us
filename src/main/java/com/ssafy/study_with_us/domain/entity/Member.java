@@ -42,14 +42,8 @@ public class Member {
     @Column(name = "activated")
     private boolean activated;
 
-    @ManyToMany
-    @JoinTable(
-            name = "member_authority",
-            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
-            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    @Transient
     private Set<Authority> authorities;
-
-
 
     @Builder
     public Member(Long id, String email, String password, String name, String phone, String bday, String gender) {
