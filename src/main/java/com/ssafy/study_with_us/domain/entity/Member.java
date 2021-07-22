@@ -42,7 +42,12 @@ public class Member {
     @Column(name = "activated")
     private boolean activated;
 
-    @Transient
+//    @Transient
+    @ManyToMany
+    @JoinTable(
+            name = "member_authority",
+            joinColumns = {@JoinColumn(name = "member_id", referencedColumnName = "member_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
     @Builder
