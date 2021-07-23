@@ -1,9 +1,7 @@
 package com.ssafy.study_with_us.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.ssafy.study_with_us.dto.StudyDto;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -11,7 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class StudyController {
 
     @PostMapping
-    public Object Create(){
+    public Object Create(@RequestBody StudyDto studyDto){
+
         return null;
     }
 
