@@ -26,7 +26,7 @@ public class MemberService {
     @Transactional
     public MemberDto readMember(MemberDto param) {
         Member member = memberRepository.findByEmail(param.getEmail()).get();
-        return new MemberDto(member.getId(), member.getEmail(), member.getPassword(), member.getName(), member.getPhone(), member.getBday(), member.getGender());
+        return new MemberDto(member.getId(), member.getEmail(), member.getPassword(), member.getName(), member.getNickname(), member.getAge(), member.getDepartment(), member.getStudytime());
     }
 
     @Transactional
@@ -39,10 +39,10 @@ public class MemberService {
             param.setPassword(passwordEncoder.encode(param.getPassword()));
         }
         if(param.getName() == null) param.setName(member.getName());
-        if(param.getPhone() == null) param.setPhone(member.getPhone());
-        if(param.getBday() == null) param.setBday(member.getBday());
-        if(param.getGender() == null) param.setGender(member.getGender());
-        return memberRepository.save(new Member(param.getId(), param.getEmail(), param.getPassword(), param.getName(), param.getPhone(), param.getBday(), param.getGender()));
+        if(param.getNickname() == null) param.setNickname(member.getNickname());
+        if(param.getAge() == null) param.setAge(member.getAge());
+        if(param.getDepartment() == null) param.setDepartment(member.getDepartment());
+        return memberRepository.save(new Member(param.getId(), param.getEmail(), param.getPassword(), param.getName(), param.getNickname(), param.getAge(), param.getDepartment(), param.getStudytime()));
     }
     @Transactional
     public void deleteMember(String email) {
@@ -50,6 +50,6 @@ public class MemberService {
     }
 
     public Member dtoToEntity(MemberDto memberDto){
-        return new Member(memberDto.getId(), memberDto.getEmail(), memberDto.getPassword(), memberDto.getName(), memberDto.getPhone(), memberDto.getBday(), memberDto.getGender());
+        return new Member(memberDto.getId(), memberDto.getEmail(), memberDto.getPassword(), memberDto.getName(), memberDto.getNickname(), memberDto.getAge(), memberDto.getDepartment(), memberDto.getStudytime());
     }
 }

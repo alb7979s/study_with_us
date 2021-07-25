@@ -12,7 +12,6 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "authority")
 @Getter
-@Builder
 public class Authority {
 
     @Id
@@ -20,6 +19,7 @@ public class Authority {
     private String authorityName;
 
     public Authority() {}
+    @Builder
     public Authority(String authorityName) {
         this.authorityName = authorityName;
     }
