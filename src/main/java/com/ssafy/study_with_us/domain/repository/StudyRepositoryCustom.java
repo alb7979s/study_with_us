@@ -1,5 +1,9 @@
 package com.ssafy.study_with_us.domain.repository;
 
-public interface StudyRepositoryCustom {
+import com.ssafy.study_with_us.domain.entity.Theme;
 
+import java.util.List;
+
+public interface StudyRepositoryCustom {
+    List<Theme> getThemes();
 }

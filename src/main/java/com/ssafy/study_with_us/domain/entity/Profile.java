@@ -1,6 +1,8 @@
 package com.ssafy.study_with_us.domain.entity;
 
 
+import lombok.Builder;
+
 import javax.persistence.*;
 
 @Entity
@@ -16,4 +18,14 @@ public class Profile {
     private String thumbnail;
     private String path;
 
+    public Profile() {
+    }
+
+    @Builder
+    public Profile(Long id, String image, String thumbnail, String path) {
+        this.id = id;
+        this.image = image;
+        this.thumbnail = thumbnail;
+        this.path = path;
+    }
 }

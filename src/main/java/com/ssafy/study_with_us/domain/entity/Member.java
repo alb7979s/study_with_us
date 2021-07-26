@@ -50,7 +50,7 @@ public class Member {
 //  방향 관계 확실치 않아서 일단 생성자에 추가 안했어요!
     @OneToOne
     @JoinColumn(name = "profile_id")
-    private StudyProfile profile;
+    private MemberProfile profile;
 
     @Builder
     public Member(Long id, String email, String password, String name, String nickname, Integer age, String group, LocalDateTime studytime) {
