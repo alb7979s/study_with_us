@@ -14,11 +14,11 @@ public class MemberDto {
     private Long id;
     private String email;
     private String password;
-    private String name;
-    private String nickname;
+    private String username;
     private Integer age;
     private String department;
     private LocalDateTime studytime;
+    private ProfileDto profile;
 
 //    public Member toEntity(){
 //        return Member.builder()
@@ -33,15 +33,15 @@ public class MemberDto {
 //    }
 
     @Builder
-    public MemberDto(Long id, String email, String password, String name, String nickname, Integer age, String department, LocalDateTime studytime) {
+    public MemberDto(Long id, String email, String password, String username, Integer age, String department, LocalDateTime studytime, ProfileDto profile) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.name = name;
-        this.nickname = nickname;
+        this.username = username;
         this.age = age;
         this.department = department;
         this.studytime = studytime;
+        this.profile = profile;
     }
 
     @Override
@@ -50,8 +50,7 @@ public class MemberDto {
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", username='" + username + '\'' +
                 ", age='" + age + '\'' +
                 ", department='" + department + '\'' +
                 ", studytime='" + studytime + '\'' +

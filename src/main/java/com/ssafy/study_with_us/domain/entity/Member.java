@@ -3,6 +3,7 @@ package com.ssafy.study_with_us.domain.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.Set;
 
 @Getter
+@Setter
 @Entity
 @Table(name = "member")
 public class Member {
@@ -25,11 +27,8 @@ public class Member {
     @Column(length = 100, nullable = false)
     private String password;
 
-    @Column(length = 20, nullable = false)
-    private String name;
-
     @Column(length = 30, nullable = false)
-    private String nickname;
+    private String username;
 
     @Column
     private Integer age;
@@ -53,18 +52,17 @@ public class Member {
     private MemberProfile profile;
 
     @Builder
-    public Member(Long id, String email, String password, String name, String nickname, Integer age, String group, LocalDateTime studytime) {
-        this(id, email, password, name, nickname, age, group, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
+    public Member(Long id, String email, String password, String username, Integer age, String group, LocalDateTime studytime) {
+        this(id, email, password, username, age, group, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
 //        this(id, email, password, name, nickname, age, group, studytime, Collections.singleton(MemberAuthorityRef.builder().authority(Authority.builder().authorityName("ROLE_USER").build()));
     }
 
     @Builder
-    public Member(Long id, String email, String password, String name, String nickname, Integer age, String department, LocalDateTime studytime, Set<Authority> authorities) {
+    public Member(Long id, String email, String password, String username, Integer age, String department, LocalDateTime studytime, Set<Authority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.name = name;
-        this.nickname = nickname;
+        this.username = username;
         this.age = age;
         this.department = department;
         this.studytime = studytime;
@@ -73,16 +71,26 @@ public class Member {
     public Member() {
     }
 
+    public Member(Long id, String email, String password, String username, Integer age, String group, LocalDateTime studytime, MemberProfile memberProfile){
+        this(id, email, password, username, age, group, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
+        this.profile = memberProfile;
+    }
+
     @Override
     public String toString() {
         return "Member{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", nickname='" + nickname + '\'' +
+                ", username='" + username + '\'' +
                 ", age=" + age +
                 ", department='" + department + '\'' +
                 '}';
+    }
+
+    public MemberProfile makeProfile(){
+        MemberProfile memberProfile = new MemberProfile();
+        this.profile = memberProfile;
+        return this.profile;
     }
 }

@@ -1,7 +1,9 @@
 package com.ssafy.study_with_us.controller;
 
+import com.ssafy.study_with_us.domain.entity.Member;
 import com.ssafy.study_with_us.dto.MemberDto;
 import com.ssafy.study_with_us.service.AuthorityService;
+import com.ssafy.study_with_us.service.MailService;
 import com.ssafy.study_with_us.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,10 +19,12 @@ public class MemberController {
 
     private final MemberService memberService;
     private final AuthorityService authorityService;
+    private final MailService mailService;
 
-    public MemberController(MemberService memberService, AuthorityService authorityService) {
+    public MemberController(MemberService memberService, AuthorityService authorityService, MailService mailService) {
         this.memberService = memberService;
         this.authorityService = authorityService;
+        this.mailService = mailService;
     }
 
     //  회원가입
@@ -60,4 +64,15 @@ public class MemberController {
     public void deleteMember(@PathVariable String email){
         memberService.deleteMember(email);
     }
+
+    @PostMapping("/pwdSearch")
+    public Object pwdSearch(@RequestBody  MemberDto param){
+        Map<String, Object> map = new HashMap<>();
+        String key = mailService.sendAuthMail(param.getEmail());
+        Member member = memberService.pwdSearch(param, key);
+        String msg = member.getEmail() + "로 메일이 전송되었습니다. 메일을 통해 인증해주세요";
+        map.put("msg" , msg);
+        return map;
+    }
+
 }

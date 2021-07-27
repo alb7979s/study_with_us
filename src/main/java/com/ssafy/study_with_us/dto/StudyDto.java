@@ -1,6 +1,5 @@
 package com.ssafy.study_with_us.dto;
 
-import com.ssafy.study_with_us.domain.entity.Theme;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,16 +14,20 @@ public class StudyDto {
     private Long studyLeader;
     private String security;
     private Set<String> themes = new HashSet<>();
+    private ProfileDto profile;
+
     public StudyDto() {
     }
 
     @Builder
-    public StudyDto(Long id, String studyName, String studyIntro, Long studyLeader, String security) {
+    public StudyDto(Long id, String studyName, String studyIntro, Long studyLeader, String security, Set<String> themes, ProfileDto profile) {
         this.id = id;
         this.studyName = studyName;
         this.studyIntro = studyIntro;
         this.studyLeader = studyLeader;
         this.security = security;
+        this.themes = themes;
+        this.profile = profile;
     }
 
     @Override
@@ -35,6 +38,8 @@ public class StudyDto {
                 ", studyIntro='" + studyIntro + '\'' +
                 ", studyLeader=" + studyLeader +
                 ", security='" + security + '\'' +
+                ", themes=" + themes +
+                ", profile=" + profile +
                 '}';
     }
 }
