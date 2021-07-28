@@ -11,10 +11,7 @@ import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StudyService {
@@ -46,10 +43,11 @@ public class StudyService {
                 .security(params.getSecurity())
                 .profile(StudyProfile.builder().id(2l).build())    // 임시로 만듦, 수정해줘야함
                 .build());
-        makeThemes(params, study);
+        makeThemes(params.getThemes(), study);
         return study;
     }
 
+    // 여기 insert, delete 모듈화 가능할듯 일단 돌아가게 만들고 후에 수정
     @Transactional
     public Object update(StudyDto params){
         Study study = studyRepository.getById(params.getId());
@@ -58,25 +56,42 @@ public class StudyService {
                 .studyName(params.getStudyName() == null ? study.getStudyName() : params.getStudyName())
                 .studyIntro(params.getStudyIntro() == null ? study.getStudyIntro() : params.getStudyIntro())
                 .build());
-        makeThemes(params, study);
+
+        Set<String> getThemes = new HashSet<>();
+        for (Theme theme : studyRepository.getThemes(study.getId())) {
+            getThemes.add(theme.getThemeName());
+        }
+        Set<String> paramThemes = params.getThemes();
+
+        Set<String> insertThemes = new HashSet<>();
+        Set<String> deleteThemes = new HashSet<>();
+        for (String paramTheme : paramThemes) {
+            if(!getThemes.contains(paramTheme)) insertThemes.add(paramTheme);
+        }
+        for (String getTheme : getThemes) {
+            if(!paramThemes.contains(getTheme)) deleteThemes.add(getTheme);
+        }
+        makeThemes(insertThemes, study);
+        removeThemes(deleteThemes, study);
         return studyRepository.update(params);
     }
-    public Object read(Long id){
-        Study study = studyRepository.getById(id);
+
+
+    public Object read(Long studyId){
+        Study study = studyRepository.getById(studyId);
         // themes 얻어오기
-        List<StudyThemeRef> getThemes = studyRepository.getThemes(id);
+        List<Theme> getThemes = studyRepository.getThemes(studyId);
         Set<String> themes = new HashSet<>();
-        for (StudyThemeRef theme : getThemes) {
-            themes.add(theme.getTheme().getThemeName());
+        for (Theme getTheme : getThemes) {
+            themes.add(getTheme.getThemeName());
         }
         // profile 얻어오기
-        Study profile1 = studyRepository.getProfile(id);
-        System.out.println("profile1 = " + profile1);
-//        ProfileDto profile = ProfileDto.builder()
-//                .id(getProfile.getId())
-//                .path(getProfile.getPath())
-//                .image(getProfile.getImage())
-//                .thumbnail(getProfile.getThumbnail()).build();
+        StudyProfile getProfile = studyRepository.getProfile(studyId);
+        ProfileDto profile = ProfileDto.builder()
+                .id(getProfile.getId())
+                .path(getProfile.getPath())
+                .image(getProfile.getImage())
+                .thumbnail(getProfile.getThumbnail()).build();
         return StudyDto.builder()
                 .id(study.getId())
                 .studyName(study.getStudyName())
@@ -84,11 +99,16 @@ public class StudyService {
                 .studyLeader(study.getStudyLeader())
                 .security(study.getSecurity())
                 .themes(themes)
-//                .profile(profile)
+                .profile(profile)
                 .build();
     }
+    private void removeThemes(Set<String> deleteThemes, Study study) {
+        for (String deleteTheme : deleteThemes) {
+            studyRepository.remove(deleteTheme, study.getId());
+        }
+    }
 
-    private void makeThemes(StudyDto params, Study study) {
+    private void makeThemes(Set<String> getThemes, Study study) {
         // DB에 있는 theme 목록 가져와서 set으로
         List<Theme> themeList = studyRepository.getThemes();
         Set<String> themes = new HashSet<>();
@@ -96,11 +116,11 @@ public class StudyService {
             themes.add(theme.getThemeName());
         }
         // 안들어있으면 theme 테이블에 생성
-        for (String theme : params.getThemes()) {
+        for (String theme : getThemes) {
             if (!themes.contains(theme)) themeRepository.save(Theme.builder().themeName(theme).build());
         }
         // 매핑 테이블에 저장
-        for (String theme : params.getThemes()) {
+        for (String theme : getThemes) {
             studyThemeRefRepository.save(StudyThemeRef.builder().study(study).theme(Theme.builder().themeName(theme).build()).build());
         }
     }

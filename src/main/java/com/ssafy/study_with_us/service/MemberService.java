@@ -29,8 +29,12 @@ public class MemberService {
     public Member joinMember(MemberDto memberDto) {
         memberDto.setPassword(passwordEncoder.encode(memberDto.getPassword()));
         Member member = dtoToEntity(memberDto);
-        MemberProfile memberProfile = member.makeProfile();
-        profileRepository.save(memberProfile);
+        MemberProfile profile = member.makeProfile();
+        ProfileDto profileDto = memberDto.getProfile();
+        profile.setImage(profileDto.getImage());
+        profile.setThumbnail(profileDto.getThumbnail());
+        profile.setPath(profileDto.getPath());
+        profileRepository.save(profile);
         return memberRepository.save(member);
     }
     @Transactional
@@ -54,7 +58,6 @@ public class MemberService {
         if(param.getAge() == null) param.setAge(member.getAge());
         if(param.getDepartment() == null) param.setDepartment(member.getDepartment());
         ProfileDto profileDto = param.getProfile();
-        System.out.println();
         MemberProfile profile = (MemberProfile) profileRepository.findById(member.getProfile().getId()).get();
         profile.setImage(profileDto.getImage());
         profile.setThumbnail(profileDto.getThumbnail());

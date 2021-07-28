@@ -48,6 +48,7 @@ public class Study {
                 ", studyIntro='" + studyIntro + '\'' +
                 ", studyLeader=" + studyLeader +
                 ", security='" + security + '\'' +
+                ", profile=" + profile +
                 '}';
     }
 }

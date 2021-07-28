@@ -1,7 +1,9 @@
 package com.ssafy.study_with_us.controller;
 
 import com.ssafy.study_with_us.domain.entity.Member;
+import com.ssafy.study_with_us.domain.entity.MemberProfile;
 import com.ssafy.study_with_us.dto.MemberDto;
+import com.ssafy.study_with_us.dto.ProfileDto;
 import com.ssafy.study_with_us.service.AuthorityService;
 import com.ssafy.study_with_us.service.MailService;
 import com.ssafy.study_with_us.service.MemberService;
@@ -52,10 +54,17 @@ public class MemberController {
     }
 
     @GetMapping("/read/{email}")
-    @PreAuthorize("hasAnyRole('ADMIN')")
     public Object readMember(@PathVariable String email){
         Map<String, Object> map = new HashMap<>();
-        map.put("member", ResponseEntity.ok(authorityService.getMemberWithAuthorities(email)));
+        try{
+            Member member = authorityService.getMemberWithAuthorities(email).get();
+            MemberProfile memberProfile = member.getProfile();
+            ProfileDto profileDto = new ProfileDto(memberProfile.getId(), memberProfile.getImage(), memberProfile.getThumbnail(), memberProfile.getPath());
+            MemberDto memberDto = new MemberDto(member.getId(), member.getEmail(), member.getPassword(), member.getUsername(), member.getAge(), member.getDepartment(), member.getStudytime(), profileDto);
+            map.put("member", memberDto);
+        }catch (Exception e){
+            map.put("msg", "해당 아이디를 가진 사용자가 없습니다.");
+        }
         return map;
     }
 

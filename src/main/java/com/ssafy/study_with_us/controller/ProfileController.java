@@ -1,12 +1,11 @@
 package com.ssafy.study_with_us.controller;
 
 import com.ssafy.study_with_us.domain.entity.StudyProfileService;
-import com.ssafy.study_with_us.dto.ProfileDto;
-import com.ssafy.study_with_us.service.ProfileService;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/profile")
@@ -17,10 +16,11 @@ public class ProfileController {
         this.studyProfileService = studyProfileService;
     }
 
-    //  return 나중에 싹 다 정리해줘야함
     @PostMapping
-    public Object create(@RequestBody ProfileDto params){
-        return studyProfileService.create(params);
+    public Object create(@RequestParam("profile") MultipartFile mf){
+        System.out.println("mf = " + mf);
+        return null;
+//        return studyProfileService.create(params);
     }
 
 }
