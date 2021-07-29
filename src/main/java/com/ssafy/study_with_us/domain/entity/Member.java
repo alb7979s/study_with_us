@@ -52,29 +52,26 @@ public class Member {
     private MemberProfile profile;
 
     @Builder
-    public Member(Long id, String email, String password, String username, Integer age, String group, LocalDateTime studytime) {
-        this(id, email, password, username, age, group, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
+    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile, LocalDateTime studytime) {
+        this(id, email, password, username, age, department, profile, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
 //        this(id, email, password, name, nickname, age, group, studytime, Collections.singleton(MemberAuthorityRef.builder().authority(Authority.builder().authorityName("ROLE_USER").build()));
     }
 
     @Builder
-    public Member(Long id, String email, String password, String username, Integer age, String department, LocalDateTime studytime, Set<Authority> authorities) {
+    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile, LocalDateTime studytime, Set<Authority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.username = username;
         this.age = age;
         this.department = department;
+        this.profile = profile;
         this.studytime = studytime;
         this.authorities = authorities;
     }
     public Member() {
     }
 
-    public Member(Long id, String email, String password, String username, Integer age, String group, LocalDateTime studytime, MemberProfile memberProfile){
-        this(id, email, password, username, age, group, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
-        this.profile = memberProfile;
-    }
 
     @Override
     public String toString() {
@@ -88,9 +85,4 @@ public class Member {
                 '}';
     }
 
-    public MemberProfile makeProfile(){
-        MemberProfile memberProfile = new MemberProfile();
-        this.profile = memberProfile;
-        return this.profile;
-    }
 }

@@ -15,7 +15,8 @@ public class StudyProfile extends Profile{
     }
 
     @Builder
-    public StudyProfile(Long id, String image, String thumbnail, String path) {
-        super(id, image, thumbnail, path);
+    public StudyProfile(Long id, String image, String imageOrgName, String thumbnail, String path) {
+        super(id, image, imageOrgName, thumbnail, path);
     }
+
 }

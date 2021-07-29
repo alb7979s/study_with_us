@@ -1,5 +1,6 @@
 package com.ssafy.study_with_us.domain.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,7 +19,8 @@ public class MemberProfile extends Profile{
         super();
     }
 
-    public MemberProfile(Long id, String image, String thumbnail, String path){
-        super(id, image, thumbnail, path);
+    @Builder
+    public MemberProfile(Long id, String image, String imageOrgName, String thumbnail, String path) {
+        super(id, image, imageOrgName, thumbnail, path);
     }
 }

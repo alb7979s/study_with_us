@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Setter
 @Getter
-@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "DTYPE")
 public class Profile {
@@ -20,15 +19,17 @@ public class Profile {
     private Long id;
 
     private String image;
+    private String imageOrgName;
     private String thumbnail;
     private String path;
 
     public Profile() {
     }
 
-    public Profile(Long id, String image, String thumbnail, String path) {
+    public Profile(Long id, String image, String imageOrgName, String thumbnail, String path) {
         this.id = id;
         this.image = image;
+        this.imageOrgName = imageOrgName;
         this.thumbnail = thumbnail;
         this.path = path;
     }
@@ -38,6 +39,7 @@ public class Profile {
         return "Profile{" +
                 "id=" + id +
                 ", image='" + image + '\'' +
+                ", imageOrgName='" + imageOrgName + '\'' +
                 ", thumbnail='" + thumbnail + '\'' +
                 ", path='" + path + '\'' +
                 '}';

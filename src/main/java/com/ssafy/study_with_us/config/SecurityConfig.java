@@ -85,6 +85,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/member/join").permitAll()
                 .antMatchers("/member/pwdSearch").permitAll()
                 .antMatchers("/member/read/*").permitAll()
+//              일단 테스트 하려고 다 열어놓음  
+                .antMatchers("/profile/**").permitAll()
+                .antMatchers("/study/**").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

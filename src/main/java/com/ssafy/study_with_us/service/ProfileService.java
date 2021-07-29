@@ -1,26 +1,44 @@
 package com.ssafy.study_with_us.service;
 
-import com.ssafy.study_with_us.domain.entity.MemberProfile;
-import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.domain.repository.ProfileRepository;
+import com.ssafy.study_with_us.domain.entity.*;
 import com.ssafy.study_with_us.dto.ProfileDto;
+import com.ssafy.study_with_us.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Service
 public class ProfileService {
-    private ProfileRepository profileRepository;
+    private StudyProfileRepository studyProfileRepository;
+    private MemberProfileRepository memberProfileRepository;
+    private FileUtil fileUtil;
 
-    public ProfileService(ProfileRepository profileRepository) {
-        this.profileRepository = profileRepository;
+    public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, FileUtil fileUtil) {
+        this.studyProfileRepository = studyProfileRepository;
+        this.memberProfileRepository = memberProfileRepository;
+        this.fileUtil = fileUtil;
     }
 
-//    public Object create(ProfileDto params){
-//        profileRepository.save(Profile.builder()
-//                .id(params.getId())
-//                .image(params.getImage())
-////                .thumbnail() 썸네일도 따로 처리 해줘야함 할게 많네...?
-//                .path(params.getPath())
-//                .build());
-//        return null;
-//    }
+    public StudyProfile studyProfileCreate(MultipartFile mf) throws IOException {
+        File imageFile = fileUtil.setImage(mf);
+        return studyProfileRepository.save(StudyProfile.builder()
+                .id(null)
+                .imageOrgName(mf.getOriginalFilename())
+                .image(imageFile.getName())
+                .path(imageFile.getParent() + "\\")
+                .thumbnail(fileUtil.setThumbnail(mf))
+                .build());
+    }
+    public MemberProfile memberProfileCreate(MultipartFile mf) throws IOException {
+        File imageFile = fileUtil.setImage(mf);
+        return memberProfileRepository.save(MemberProfile.builder()
+                .id(null)
+                .imageOrgName(mf.getOriginalFilename())
+                .image(imageFile.getName())
+                .path(imageFile.getParent() + "\\")
+                .thumbnail(fileUtil.setThumbnail(mf))
+                .build());
+    }
 }

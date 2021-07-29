@@ -41,7 +41,7 @@ public class StudyService {
                 .studyIntro(params.getStudyIntro())
                 .studyLeader(getMemberId(SecurityUtil.getCurrentUsername()))
                 .security(params.getSecurity())
-                .profile(StudyProfile.builder().id(2l).build())    // 임시로 만듦, 수정해줘야함
+                .profile((StudyProfile) params.getProfile())
                 .build());
         makeThemes(params.getThemes(), study);
         return study;
@@ -87,8 +87,9 @@ public class StudyService {
         }
         // profile 얻어오기
         StudyProfile getProfile = studyRepository.getProfile(studyId);
-        ProfileDto profile = ProfileDto.builder()
+        Profile profile = StudyProfile.builder()
                 .id(getProfile.getId())
+                .imageOrgName(getProfile.getImageOrgName())
                 .path(getProfile.getPath())
                 .image(getProfile.getImage())
                 .thumbnail(getProfile.getThumbnail()).build();
