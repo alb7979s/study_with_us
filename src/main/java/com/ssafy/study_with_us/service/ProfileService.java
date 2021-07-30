@@ -1,7 +1,8 @@
 package com.ssafy.study_with_us.service;
 
 import com.ssafy.study_with_us.domain.entity.*;
-import com.ssafy.study_with_us.dto.ProfileDto;
+import com.ssafy.study_with_us.domain.repository.MemberProfileRepository;
+import com.ssafy.study_with_us.domain.repository.StudyProfileRepository;
 import com.ssafy.study_with_us.util.FileUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

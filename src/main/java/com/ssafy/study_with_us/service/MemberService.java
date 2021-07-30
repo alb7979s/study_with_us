@@ -75,7 +75,7 @@ public class MemberService {
 //
     public Member pwdSearch(MemberDto memberDto, String key){
         Member member = memberRepository.findByEmail(memberDto.getEmail()).get();
-        member.setPassword(passwordEncoder.encode(key));
+        member.builder().password(passwordEncoder.encode(key)).build();
         memberRepository.save(member);
         return member;
     }

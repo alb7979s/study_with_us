@@ -29,6 +29,10 @@ public class StudyController {
         this.profileService = profileService;
     }
 
+    @PostMapping("/join")
+    public Object join(StudyDto params){
+        return studyService.joinMember(params);
+    }
     @PostMapping
     public Object create(FileDto params) throws IOException {
         Profile profile = null;

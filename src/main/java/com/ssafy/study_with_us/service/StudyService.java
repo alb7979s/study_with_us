@@ -27,6 +27,15 @@ public class StudyService {
         this.studyThemeRefRepository = studyThemeRefRepository;
     }
 
+    // 여러개 들어오는거 처리할 수 있게끔?
+    public Object joinMembers(){
+        return null;
+    }
+    public Object joinMember(StudyDto params){
+        // member 토큰으로 얻어와서
+        // memberStudyRef에 추가
+        return null;
+    }
     /*
     * 1. 스터디 생성
     * 2. set으로 contain 확인 한 후에 없으면 생성
