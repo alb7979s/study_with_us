@@ -75,8 +75,13 @@ public class MemberService {
 //
     public Member pwdSearch(MemberDto memberDto, String key){
         Member member = memberRepository.findByEmail(memberDto.getEmail()).get();
-        member.builder().password(passwordEncoder.encode(key)).build();
-        memberRepository.save(member);
-        return member;
+        return memberRepository.save(Member.builder().id(member.getId())
+                .email(member.getEmail())
+                .password(passwordEncoder.encode(key))
+                .username(member.getUsername())
+                .age(member.getAge())
+                .department(member.getDepartment())
+                .studytime(member.getStudytime())
+                .profile(member.getProfile()).build());
     }
 }

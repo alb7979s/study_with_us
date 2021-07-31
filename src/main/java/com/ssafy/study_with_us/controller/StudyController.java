@@ -1,20 +1,16 @@
 package com.ssafy.study_with_us.controller;
 
 import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.domain.entity.StudyProfile;
 import com.ssafy.study_with_us.dto.FileDto;
+import com.ssafy.study_with_us.dto.IdReqDto;
 import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.service.ProfileService;
 import com.ssafy.study_with_us.service.StudyService;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 
@@ -29,9 +25,18 @@ public class StudyController {
         this.profileService = profileService;
     }
 
+    // 멤버가 직접 가입 하는거
     @PostMapping("/join")
-    public Object join(StudyDto params){
+    public Object join(@RequestBody IdReqDto params){
         return studyService.joinMember(params);
+    }
+    @PostMapping("/invite")
+    public Object inviteMember(@RequestBody IdReqDto params){
+        return studyService.joinMember(params);
+    }
+    @DeleteMapping("/withdraw")
+    public Object withdraw(@RequestBody IdReqDto params){
+        return studyService.withdraw(params);
     }
     @PostMapping
     public Object create(FileDto params) throws IOException {

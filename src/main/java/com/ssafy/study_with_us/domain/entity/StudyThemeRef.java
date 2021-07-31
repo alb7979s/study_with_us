@@ -5,6 +5,8 @@ import lombok.Getter;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.*;
+
 @Entity
 @Getter
 @Table(name = "stduy_theme_ref")
@@ -14,11 +16,11 @@ public class StudyThemeRef {
     @Column(name = "study_theme_ref_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "study_id")
     private Study study;
 
-    @ManyToOne
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "theme_name")
     private Theme theme;
 
