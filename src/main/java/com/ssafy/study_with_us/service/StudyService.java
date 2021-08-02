@@ -96,7 +96,7 @@ public class StudyService {
     }
 
 
-    public Object read(Long studyId){
+    public StudyDto read(Long studyId){
         Study study = studyRepository.getById(studyId);
         // themes 얻어오기
         List<Theme> getThemes = studyRepository.getThemes(studyId);
@@ -145,6 +145,14 @@ public class StudyService {
         }
     }
 
+    public Object searchStudyByThemes(List<String> themes){
+        List<Long> studyIds = studyThemeRefRepository.searchStudyByThemes(themes);
+        List<StudyDto> results = new ArrayList<>();
+        for (Long studyId : studyIds) {
+            results.add(read(studyId));
+        }
+        return results;
+    }
     private Long getMemberId() {
         String s = SecurityUtil.getCurrentUsername().get();
         return memberRepository.findByEmail(s).get().getId();

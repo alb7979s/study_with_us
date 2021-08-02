@@ -40,6 +40,7 @@ public class MemberController {
     //  회원가입
     @PostMapping("/join")
     public Object join(FileDto params) throws IOException {
+        System.out.println("15.164.227.85:888815.164.227.85:888815.164.227.85:888815.164.227.85:888815.164.227.85:8888");
         Profile profile = null;
         // 파일 정보 있으면 받은 정보로 생성
         if (params.getFiles() != null) {

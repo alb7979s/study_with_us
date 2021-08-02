@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -73,5 +75,10 @@ public class StudyController {
     @GetMapping
     public Object read(@RequestParam Long id){
         return studyService.read(id);
+    }
+
+    @PostMapping("/search")
+    public Object searchStudyByThemes(@RequestBody Map<String, List<String>> params){
+        return studyService.searchStudyByThemes(params.get("themes"));
     }
 }
