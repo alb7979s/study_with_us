@@ -3,7 +3,6 @@ package com.ssafy.study_with_us.service;
 import com.ssafy.study_with_us.domain.entity.*;
 import com.ssafy.study_with_us.domain.repository.*;
 import com.ssafy.study_with_us.dto.IdReqDto;
-import com.ssafy.study_with_us.dto.ProfileDto;
 import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.dto.StudyMemberDto;
 import com.ssafy.study_with_us.util.SecurityUtil;
@@ -54,14 +53,10 @@ public class StudyService {
     */
     public Object create(StudyDto params){
         // 1. 스터디 생성 (여기 profile_id 어떻게 저장할지 생각해보기)
-        Study study = studyRepository.save(Study.builder()
-                .id(null)
-                .studyName(params.getStudyName())
-                .studyIntro(params.getStudyIntro())
-                .studyLeader(getMemberId())
-                .security(params.getSecurity())
-                .profile((StudyProfile) params.getProfile())
-                .build());
+        Study study = saveStudy(params);
+        studyMemberRefRepository.save(StudyMemberRef.builder()
+                .study(study)
+                .member(memberRepository.getById(getMemberId())).build());
         makeThemes(params.getThemes(), study);
         return study;
     }
@@ -69,12 +64,7 @@ public class StudyService {
     // 여기 insert, delete 모듈화 가능할듯 일단 돌아가게 만들고 후에 수정
     @Transactional
     public Object update(StudyDto params){
-        Study study = studyRepository.getById(params.getId());
-        studyRepository.update(StudyDto.builder()
-                .id(params.getId())
-                .studyName(params.getStudyName() == null ? study.getStudyName() : params.getStudyName())
-                .studyIntro(params.getStudyIntro() == null ? study.getStudyIntro() : params.getStudyIntro())
-                .build());
+        Study study = saveStudy(params);
 
         Set<String> getThemes = new HashSet<>();
         for (Theme theme : studyRepository.getThemes(study.getId())) {
@@ -92,11 +82,11 @@ public class StudyService {
         }
         makeThemes(insertThemes, study);
         removeThemes(deleteThemes, study);
-        return studyRepository.update(params);
+        return null;
     }
 
 
-    public StudyDto read(Long studyId){
+    public StudyDto getDetail(Long studyId){
         Study study = studyRepository.getById(studyId);
         // themes 얻어오기
         List<Theme> getThemes = studyRepository.getThemes(studyId);
@@ -121,6 +111,17 @@ public class StudyService {
                 .themes(themes)
                 .profile(profile)
                 .build();
+    }
+
+    public List<StudyDto> getStudyList(){
+        List<Study> studies = studyMemberRefRepository.getByMemberId(getMemberId());
+        List<StudyDto> results = new ArrayList<>();
+        for (Study study : studies) {
+            results.add(StudyDto.builder().id(study.getId()).studyName(study.getStudyName())
+                    .studyLeader(study.getStudyLeader()).security(study.getSecurity())
+                    .studyIntro(study.getStudyIntro()).build());
+        }
+        return results;
     }
     private void removeThemes(Set<String> deleteThemes, Study study) {
         for (String deleteTheme : deleteThemes) {
@@ -149,12 +150,22 @@ public class StudyService {
         List<Long> studyIds = studyThemeRefRepository.searchStudyByThemes(themes);
         List<StudyDto> results = new ArrayList<>();
         for (Long studyId : studyIds) {
-            results.add(read(studyId));
+            results.add(getDetail(studyId));
         }
         return results;
     }
     private Long getMemberId() {
         String s = SecurityUtil.getCurrentUsername().get();
         return memberRepository.findByEmail(s).get().getId();
+    }
+    private Study saveStudy(StudyDto params) {
+        return studyRepository.save(Study.builder()
+                .id(params.getId())
+                .studyName(params.getStudyName())
+                .studyIntro(params.getStudyIntro())
+                .studyLeader(getMemberId())
+                .security(params.getSecurity())
+                .profile((StudyProfile) params.getProfile())
+                .build());
     }
 }
