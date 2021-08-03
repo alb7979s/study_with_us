@@ -9,6 +9,9 @@ import com.ssafy.study_with_us.dto.ProfileDto;
 import com.ssafy.study_with_us.dto.TokenDto;
 import com.ssafy.study_with_us.jwt.JwtFilter;
 import com.ssafy.study_with_us.jwt.TokenProvider;
+import com.ssafy.study_with_us.util.response.ApiResult;
+import com.ssafy.study_with_us.util.response.ResponseMessage;
+import com.ssafy.study_with_us.util.response.StatusCode;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -49,7 +52,7 @@ public class AuthController {
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("Token", new TokenDto(jwt));
+        map.put("token", jwt);
         Member entity = memberRepository.findByEmail(member.getEmail()).get();
         Profile profile = entity.getProfile();
         MemberResDto dto = MemberResDto.builder().id(entity.getId())
@@ -61,6 +64,8 @@ public class AuthController {
                 .profile(ProfileDto.builder().id(profile.getId()).image(profile.getImage()).path(profile.getPath()).thumbnail(profile.getThumbnail()).imageOrgName(profile.getImageOrgName()).build())
                 .build();
         map.put("member", dto);
-        return map;
+        return ApiResult.builder().status(StatusCode.OK)
+                .message(ResponseMessage.LOGIN_SUCCESS)
+                .dataType("member, token").data(map).build();
     }
 }

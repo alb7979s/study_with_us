@@ -5,6 +5,7 @@ import com.ssafy.study_with_us.domain.repository.MemberProfileRepository;
 import com.ssafy.study_with_us.domain.repository.StudyProfileRepository;
 import com.ssafy.study_with_us.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -32,6 +33,7 @@ public class ProfileService {
                 .thumbnail(fileUtil.setThumbnail(mf))
                 .build());
     }
+    @Transactional
     public MemberProfile memberProfileCreate(MultipartFile mf) throws IOException {
         File imageFile = fileUtil.setImage(mf);
         return memberProfileRepository.save(MemberProfile.builder()
