@@ -14,7 +14,7 @@ import static com.ssafy.study_with_us.domain.entity.QTheme.theme;
 
 @Repository
 public class StudyRepositoryImpl implements StudyRepositoryCustom{
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public StudyRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;

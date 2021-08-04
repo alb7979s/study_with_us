@@ -12,7 +12,7 @@ import static com.ssafy.study_with_us.domain.entity.QStudyMemberRef.*;
 
 @Repository
 public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCustom {
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public StudyMemberRefRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;

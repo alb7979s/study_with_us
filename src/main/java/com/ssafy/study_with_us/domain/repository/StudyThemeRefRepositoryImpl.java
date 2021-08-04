@@ -10,7 +10,7 @@ import static com.ssafy.study_with_us.domain.entity.QStudyThemeRef.*;
 
 @Repository
 public class StudyThemeRefRepositoryImpl implements StudyThemeRefRepositoryCustom {
-    private JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public StudyThemeRefRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
         this.jpaQueryFactory = jpaQueryFactory;
