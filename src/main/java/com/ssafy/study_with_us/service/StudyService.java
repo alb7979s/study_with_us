@@ -13,11 +13,11 @@ import java.util.*;
 
 @Service
 public class StudyService {
-    private StudyRepository studyRepository;
-    private MemberRepository memberRepository;
-    private ThemeRepository themeRepository;
-    private StudyThemeRefRepository studyThemeRefRepository;
-    private StudyMemberRefRepository studyMemberRefRepository;
+    private final StudyRepository studyRepository;
+    private final MemberRepository memberRepository;
+    private final ThemeRepository themeRepository;
+    private final StudyThemeRefRepository studyThemeRefRepository;
+    private final StudyMemberRefRepository studyMemberRefRepository;
 
     public StudyService(StudyRepository studyRepository, MemberRepository memberRepository, ThemeRepository themeRepository, StudyThemeRefRepository studyThemeRefRepository, StudyMemberRefRepository studyMemberRefRepository) {
         this.studyRepository = studyRepository;

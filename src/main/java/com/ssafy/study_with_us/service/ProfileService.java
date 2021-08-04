@@ -13,9 +13,9 @@ import java.io.IOException;
 
 @Service
 public class ProfileService {
-    private StudyProfileRepository studyProfileRepository;
-    private MemberProfileRepository memberProfileRepository;
-    private FileUtil fileUtil;
+    private final StudyProfileRepository studyProfileRepository;
+    private final MemberProfileRepository memberProfileRepository;
+    private final FileUtil fileUtil;
 
     public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, FileUtil fileUtil) {
         this.studyProfileRepository = studyProfileRepository;

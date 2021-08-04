@@ -13,9 +13,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class MailService {
-    @Autowired
-    private JavaMailSenderImpl mailSender;
-//    private int size;
+    private final JavaMailSenderImpl mailSender;
+
+    public MailService(JavaMailSenderImpl mailSender) {
+        this.mailSender = mailSender;
+    }
+    //    private int size;
 
     //인증키 생성
 //    private String getKey(int size) {

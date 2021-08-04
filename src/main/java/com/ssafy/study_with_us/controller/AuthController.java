@@ -63,6 +63,7 @@ public class AuthController {
                 .department(entity.getDepartment())
                 .profile(ProfileDto.builder().id(profile.getId()).image(profile.getImage()).path(profile.getPath()).thumbnail(profile.getThumbnail()).imageOrgName(profile.getImageOrgName()).build())
                 .build();
+
         map.put("member", dto);
         return ApiResult.builder().status(StatusCode.OK)
                 .message(ResponseMessage.LOGIN_SUCCESS)

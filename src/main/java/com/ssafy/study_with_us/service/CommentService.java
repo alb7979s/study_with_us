@@ -13,9 +13,9 @@ import java.util.List;
 
 @Service
 public class CommentService {
-    private CommentRepository commentRepository;
-    private MemberRepository memberRepository;
-    private StudyRepository studyRepository;
+    private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
+    private final StudyRepository studyRepository;
 
     public CommentService(CommentRepository commentRepository, MemberRepository memberRepository, StudyRepository studyRepository) {
         this.commentRepository = commentRepository;

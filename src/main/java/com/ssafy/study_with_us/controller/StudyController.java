@@ -19,8 +19,8 @@ import java.util.*;
 @RestController
 @RequestMapping("/study")
 public class StudyController {
-    private StudyService studyService;
-    private ProfileService profileService;
+    private final StudyService studyService;
+    private final ProfileService profileService;
 
     public StudyController(StudyService studyService, ProfileService profileService) {
         this.studyService = studyService;
