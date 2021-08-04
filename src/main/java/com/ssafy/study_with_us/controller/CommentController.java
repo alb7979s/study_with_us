@@ -18,8 +18,6 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    // studyId는 받아야함
-    // memberId는 보내주면 받고, 아니면 token으로 직접 찾기
     @PostMapping
     public Object create(@RequestBody CommentDto params){
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.CREATED_COMMENT).dataType("comment").data(commentService.create(params)).build();
