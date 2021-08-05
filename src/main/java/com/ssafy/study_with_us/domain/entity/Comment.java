@@ -36,7 +36,7 @@ public class Comment {
     public Comment(Long id, String content, LocalDate reg_time, Member member, Study study) {
         this.id = id;
         this.content = content;
-        this.regTime = reg_time;
+        this.regTime = reg_time == null ? LocalDate.now().plusDays(1) : reg_time;
         this.member = member;
         this.study = study;
     }

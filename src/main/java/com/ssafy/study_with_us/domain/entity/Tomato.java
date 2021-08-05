@@ -2,6 +2,7 @@ package com.ssafy.study_with_us.domain.entity;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
