@@ -3,7 +3,7 @@ package com.ssafy.study_with_us.controller;
 import com.ssafy.study_with_us.domain.entity.Member;
 import com.ssafy.study_with_us.domain.entity.MemberProfile;
 import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.dto.FileDto;
+import com.ssafy.study_with_us.dto.FileReqDto;
 import com.ssafy.study_with_us.dto.MemberDto;
 import com.ssafy.study_with_us.dto.MemberResDto;
 import com.ssafy.study_with_us.dto.ProfileDto;
@@ -15,13 +15,9 @@ import com.ssafy.study_with_us.util.response.ApiResult;
 import com.ssafy.study_with_us.util.response.ResponseMessage;
 import com.ssafy.study_with_us.util.response.StatusCode;
 import org.json.JSONObject;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @CrossOrigin
 @RestController
@@ -42,7 +38,7 @@ public class MemberController {
 
     //  회원가입
     @PostMapping("/join")
-    public Object join(FileDto params) throws IOException {
+    public Object join(FileReqDto params) throws IOException {
         Profile profile = null;
         // 파일 정보 있으면 받은 정보로 생성
         if (params.getFiles() != null) {

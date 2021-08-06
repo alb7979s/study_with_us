@@ -1,6 +1,7 @@
 package com.ssafy.study_with_us.domain.entity;
 
 
+import com.ssafy.study_with_us.dto.ProfileDto;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -40,5 +41,9 @@ public class Profile {
                 ", thumbnail='" + thumbnail + '\'' +
                 ", path='" + path + '\'' +
                 '}';
+    }
+    public ProfileDto entityToDto(){
+        return ProfileDto.builder().id(id).image(image).imageOrgName(imageOrgName)
+                .thumbnail(thumbnail).path(path).build();
     }
 }

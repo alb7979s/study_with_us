@@ -5,28 +5,33 @@ import com.ssafy.study_with_us.domain.entity.Study;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 public class StudyMemberDto {
     private Long id;
-    private Long studyId;
-    private Long memberId;
+    private StudyDto study;
+    private MemberDto member;
+    private LocalDateTime recentlyConnectionTime;
 
     public StudyMemberDto() {
     }
 
     @Builder
-    public StudyMemberDto(Long id, Long studyId, Long memberId) {
+    public StudyMemberDto(Long id, StudyDto study, MemberDto member, LocalDateTime recentlyConnectionTime) {
         this.id = id;
-        this.studyId = studyId;
-        this.memberId = memberId;
+        this.study = study;
+        this.member = member;
+        this.recentlyConnectionTime = recentlyConnectionTime;
     }
 
     @Override
     public String toString() {
         return "StudyMemberDto{" +
                 "id=" + id +
-                ", studyId=" + studyId +
-                ", memberId=" + memberId +
+                ", study=" + study +
+                ", member=" + member +
+                ", recentlyConnectionTime=" + recentlyConnectionTime +
                 '}';
     }
 }

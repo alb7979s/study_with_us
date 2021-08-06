@@ -1,5 +1,6 @@
 package com.ssafy.study_with_us.domain.entity;
 
+import com.ssafy.study_with_us.dto.ProfileDto;
 import lombok.Builder;
 
 import javax.persistence.DiscriminatorValue;

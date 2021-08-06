@@ -1,11 +1,14 @@
 package com.ssafy.study_with_us.domain.entity;
 
+import com.ssafy.study_with_us.dto.TomatoDto;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -39,5 +42,8 @@ public class Tomato {
         this.tomatoDate = tomatoDate;
         this.member = member;
         this.study = study;
+    }
+    public TomatoDto entityToDto(){
+        return TomatoDto.builder().id(id).count(tomatoCount).date(tomatoDate).memberId(member.getId()).studyId(study.getId()).build();
     }
 }

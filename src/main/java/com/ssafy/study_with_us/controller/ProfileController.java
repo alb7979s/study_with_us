@@ -1,31 +1,44 @@
 package com.ssafy.study_with_us.controller;
 
-import com.ssafy.study_with_us.dto.FileDto;
-import org.json.JSONObject;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import com.ssafy.study_with_us.service.ProfileService;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @RestController
 @RequestMapping("/profile")
 public class ProfileController {
 
-    
-    // 받는거 예시
-    @PostMapping
-    public Object fileReqTest(FileDto fileDto){
-        // file 있을시 처리
-        if (fileDto.getFiles() != null) {
-            MultipartFile mf = fileDto.getFiles().get(0);
-        }
-        // data 처리
-        JSONObject jObject = new JSONObject(fileDto.getJsonData());
-        // jObject 가지고 멤버냐, 스터디냐에 따라서 처리해줌
-        System.out.println("fileDto = " + fileDto);
-        System.out.println("jObject.get(\"image\") = " + jObject.get("image"));
-        return null;
-//        return studyProfileService.create(params);
+    private final ProfileService profileService;
+
+    public ProfileController(ProfileService profileService) {
+        this.profileService = profileService;
     }
 
+    @GetMapping("/study")
+    public ResponseEntity<Resource> viewImg(@RequestParam Long id) throws IOException {
+        System.out.println("id = " + id);
+        Path path = new File(profileService.getProfile(id)).toPath();
+        return getResponseEntity(path);
+    }
+
+    @GetMapping
+    public ResponseEntity<Resource> viewImg() throws IOException {
+        Path path = new File(profileService.getProfile(null)).toPath();
+        return getResponseEntity(path);
+    }
+
+    private ResponseEntity<Resource> getResponseEntity(Path path) throws IOException {
+        FileSystemResource resource = new FileSystemResource(path);
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
+                .body(resource);
+    }
 }

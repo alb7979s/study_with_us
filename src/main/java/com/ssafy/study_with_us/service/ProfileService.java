@@ -1,9 +1,11 @@
 package com.ssafy.study_with_us.service;
 
-import com.ssafy.study_with_us.domain.entity.*;
-import com.ssafy.study_with_us.domain.repository.MemberProfileRepository;
-import com.ssafy.study_with_us.domain.repository.StudyProfileRepository;
+import com.ssafy.study_with_us.domain.entity.MemberProfile;
+import com.ssafy.study_with_us.domain.entity.Profile;
+import com.ssafy.study_with_us.domain.entity.StudyProfile;
+import com.ssafy.study_with_us.domain.repository.*;
 import com.ssafy.study_with_us.util.FileUtil;
+import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,11 +17,17 @@ import java.io.IOException;
 public class ProfileService {
     private final StudyProfileRepository studyProfileRepository;
     private final MemberProfileRepository memberProfileRepository;
+    private final MemberRepository memberRepository;
+    private final StudyRepository studyRepository;
+    private final ProfileRepository profileRepository;
     private final FileUtil fileUtil;
 
-    public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, FileUtil fileUtil) {
+    public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, MemberRepository memberRepository, StudyRepository studyRepository, ProfileRepository profileRepository, FileUtil fileUtil) {
         this.studyProfileRepository = studyProfileRepository;
         this.memberProfileRepository = memberProfileRepository;
+        this.memberRepository = memberRepository;
+        this.studyRepository = studyRepository;
+        this.profileRepository = profileRepository;
         this.fileUtil = fileUtil;
     }
 
@@ -30,7 +38,7 @@ public class ProfileService {
                 .imageOrgName(mf.getOriginalFilename())
                 .image(imageFile.getName())
                 .path(imageFile.getParent() + "\\")
-                .thumbnail(fileUtil.setThumbnail(mf))
+                .thumbnail(fileUtil.setThumbnail(imageFile))
                 .build());
     }
     @Transactional
@@ -41,7 +49,23 @@ public class ProfileService {
                 .imageOrgName(mf.getOriginalFilename())
                 .image(imageFile.getName())
                 .path(imageFile.getParent() + "\\")
-                .thumbnail(fileUtil.setThumbnail(mf))
+                .thumbnail(fileUtil.setThumbnail(imageFile))
                 .build());
+    }
+
+    public String getProfile(Long studyId){
+        Long profileId = null;
+        if(studyId == null){
+            profileId = memberRepository.getById(getMemberId()).getProfile().getId();
+        } else {
+            profileId = studyRepository.getById(studyId).getProfile().getId();
+        }
+        Profile profile = profileRepository.getById(profileId);
+        return profile.getPath() + profile.getImage();
+    }
+
+    private Long getMemberId() {
+        String s = SecurityUtil.getCurrentUsername().get();
+        return memberRepository.findByEmail(s).get().getId();
     }
 }

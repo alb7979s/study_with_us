@@ -1,5 +1,6 @@
 package com.ssafy.study_with_us.domain.entity;
 
+import com.ssafy.study_with_us.dto.StudyDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -50,5 +51,9 @@ public class Study {
                 ", security='" + security + '\'' +
                 ", profile=" + profile +
                 '}';
+    }
+    public StudyDto entityToDto(){
+        return StudyDto.builder().id(id).studyName(studyName).studyIntro(studyIntro).studyLeader(studyLeader)
+                .security(security).profile(profile.entityToDto()).build();
     }
 }

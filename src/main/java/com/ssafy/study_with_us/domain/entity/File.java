@@ -1,19 +1,28 @@
-package com.ssafy.study_with_us.dto;
+package com.ssafy.study_with_us.domain.entity;
 
-import lombok.Builder;
+import lombok.Getter;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
-public abstract class FileDto {
+@Getter
+@MappedSuperclass
+public abstract class File {
+
+    @Column(name = "sys_name")
     private String sysName;
+    @Column(name = "org_name")
     private String orgName;
+    @Column(name = "path")
     private String path;
+    @Column(name = "reg_time")
     private LocalDateTime regTime;
 
-    public FileDto() {
+    public File() {
     }
 
-    public FileDto(String sysName, String orgName, String path, LocalDateTime regTime) {
+    public File(String sysName, String orgName, String path, LocalDateTime regTime) {
         this.sysName = sysName;
         this.orgName = orgName;
         this.path = path;
@@ -22,7 +31,7 @@ public abstract class FileDto {
 
     @Override
     public String toString() {
-        return "FileDto{" +
+        return "File{" +
                 "sysName='" + sysName + '\'' +
                 ", orgName='" + orgName + '\'' +
                 ", path='" + path + '\'' +

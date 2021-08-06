@@ -33,9 +33,7 @@ public class FileUtil {
         File f = new File(file.getPath(), UUID.randomUUID() + ext);
         return f;
     }
-    public String setThumbnail(MultipartFile mf) throws IOException {
-        File f = makeName(mf.getOriginalFilename(), makeDir(""));
-        mf.transferTo(f);
+    public String setThumbnail(File f) throws IOException {
         // 썸네일 저장
         Thumbnails.of(f)
                 .size(300, 200)
@@ -45,7 +43,7 @@ public class FileUtil {
 
     public File setImage(MultipartFile mf) throws IOException {
         File f = makeName(mf.getOriginalFilename(), makeDir(""));
-//        mf.transferTo(f);
+        mf.transferTo(f);
         return f;
     }
     public void setFiles(MultipartFile[] files) throws IOException, SQLException {

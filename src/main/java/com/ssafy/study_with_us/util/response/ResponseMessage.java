@@ -16,11 +16,18 @@ public class ResponseMessage {
     public static final String CREATED_STUDY_MEMBER = "스터디 회원 가입 성공";
     public static final String DELETED_STUDY_MEMBER = "스터디 회원 탈퇴 성공";
     public static final String SEARCHED_STUDY_THEMES = "스터디 테마 검색 성공";
+    public static final String CONNECTED_STUDY = "스터디 입장 성공";
+    public static final String SEARCHED_RECENTLY_STUDIES = "최근 스터디 조회";
+
 
     public static final String CREATED_COMMENT = "댓글 생성 성공";
     public static final String UPDATED_COMMENT = "댓글 수정 성공";
     public static final String DELETED_COMMENT = "댓글 삭제 성공";
     public static final String SEARCHED_COMMENTS = "댓글 검색 성공";
+
+    public static final String SEARCHED_MEMBER_TOMATOES = "멤버별 토마토 검색 성공";
+    public static final String SEARCHED_STUDY_TOMATOES = "스터디별 토마토 검색 성공";
+
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";
     public static final String DB_ERROR = "데이터베이스 에러";

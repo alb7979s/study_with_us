@@ -1,6 +1,7 @@
 package com.ssafy.study_with_us.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ssafy.study_with_us.dto.MemberDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,4 +85,7 @@ public class Member {
                 '}';
     }
 
+    public MemberDto entityToDto(){
+        return MemberDto.builder().id(id).email(email).password(password).username(username).age(age).department(department).build();
+    }
 }

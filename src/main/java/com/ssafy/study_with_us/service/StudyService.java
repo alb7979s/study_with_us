@@ -3,12 +3,14 @@ package com.ssafy.study_with_us.service;
 import com.ssafy.study_with_us.domain.entity.*;
 import com.ssafy.study_with_us.domain.repository.*;
 import com.ssafy.study_with_us.dto.IdReqDto;
+import com.ssafy.study_with_us.dto.ProfileDto;
 import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.dto.StudyMemberDto;
 import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -35,8 +37,8 @@ public class StudyService {
                 .build());
         return StudyMemberDto.builder()
                 .id(studyMemberRef.getId())
-                .memberId(studyMemberRef.getMember().getId())
-                .studyId(studyMemberRef.getStudy().getId()).build();
+                .member(studyMemberRef.getMember().entityToDto())
+                .study(studyMemberRef.getStudy().entityToDto()).build();
     }
 
     @Transactional
@@ -52,7 +54,6 @@ public class StudyService {
     * 4. 만들어진 스터디 id + themes로(해시태그들) 맵핑 테이블에 저장
     */
     public Object create(StudyDto params){
-        // 1. 스터디 생성 (여기 profile_id 어떻게 저장할지 생각해보기)
         Study study = saveStudy(params);
         studyMemberRefRepository.save(StudyMemberRef.builder()
                 .study(study)
@@ -109,7 +110,7 @@ public class StudyService {
                 .studyLeader(study.getStudyLeader())
                 .security(study.getSecurity())
                 .themes(themes)
-                .profile(profile)
+                .profile(profile.entityToDto())
                 .build();
     }
 
@@ -154,18 +155,40 @@ public class StudyService {
         }
         return results;
     }
+
+    public Object connectStudy(Long studyId){
+        StudyMemberRef studyMember = studyMemberRefRepository.getStudyMember(getMemberId(), studyId);
+        StudyMemberRef result = studyMemberRefRepository.save(StudyMemberRef.builder().id(studyMember.getId()).member(studyMember.getMember())
+                .study(studyMember.getStudy()).recentlyConnectionTime(LocalDateTime.now()).build());
+        return StudyMemberDto.builder().id(result.getId())
+                .study(result.getStudy().entityToDto())
+                .member(result.getMember().entityToDto())
+                .recentlyConnectionTime(result.getRecentlyConnectionTime()).build();
+    }
+
+    public Object getRecentlyStudies(){
+        List<StudyMemberRef> recentlyStudies = studyMemberRefRepository.getRecentlyStudies(getMemberId());
+        List<StudyMemberDto> results = new ArrayList<>();
+        for (StudyMemberRef recentlyStudy : recentlyStudies) {
+            results.add(recentlyStudy.entityToDto());
+        }
+        return results;
+    }
+
     private Long getMemberId() {
         String s = SecurityUtil.getCurrentUsername().get();
         return memberRepository.findByEmail(s).get().getId();
     }
     private Study saveStudy(StudyDto params) {
+        ProfileDto profile = params.getProfile();
         return studyRepository.save(Study.builder()
                 .id(params.getId())
                 .studyName(params.getStudyName())
                 .studyIntro(params.getStudyIntro())
                 .studyLeader(getMemberId())
                 .security(params.getSecurity())
-                .profile((StudyProfile) params.getProfile())
+                .profile(StudyProfile.builder().id(profile.getId()).imageOrgName(profile.getImageOrgName()).image(profile.getImage())
+                        .path(profile.getPath()).thumbnail(profile.getThumbnail()).build())
                 .build());
     }
 }

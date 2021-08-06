@@ -1,6 +1,5 @@
 package com.ssafy.study_with_us.dto;
 
-import com.ssafy.study_with_us.domain.entity.Profile;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,13 +14,13 @@ public class StudyDto {
     private Long studyLeader;
     private String security;
     private Set<String> themes = new HashSet<>();
-    private Profile profile;
+    private ProfileDto profile;
 
     public StudyDto() {
     }
 
     @Builder
-    public StudyDto(Long id, String studyName, String studyIntro, Long studyLeader, String security, Set<String> themes, Profile profile) {
+    public StudyDto(Long id, String studyName, String studyIntro, Long studyLeader, String security, Set<String> themes, ProfileDto profile) {
         this.id = id;
         this.studyName = studyName;
         this.studyIntro = studyIntro;
