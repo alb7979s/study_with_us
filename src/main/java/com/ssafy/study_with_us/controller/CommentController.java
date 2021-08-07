@@ -33,7 +33,7 @@ public class CommentController {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.DELETED_COMMENT).build();
     }
     @GetMapping
-    public Object getComments(@RequestParam Long id) {
-        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_COMMENTS).dataType("comments").data(commentService.getComments(id)).build();
+    public Object getComments(@RequestParam Long studyId) {
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_COMMENTS).dataType("comments").data(commentService.getComments(studyId)).build();
     }
 }

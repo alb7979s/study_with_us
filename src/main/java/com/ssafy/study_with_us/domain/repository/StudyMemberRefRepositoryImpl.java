@@ -26,8 +26,8 @@ public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCus
                 .execute();
     }
 
-    public List<Study> getByMemberId(Long memberId){
-        return jpaQueryFactory.select(studyMemberRef.study).from(studyMemberRef).where(memberIdEq(memberId)).fetch();
+    public List<Study> getByMemberId(Long memberId, Integer page){
+        return jpaQueryFactory.select(studyMemberRef.study).from(studyMemberRef).where(memberIdEq(memberId)).offset((page-1)*6).limit(6).fetch();
     }
 
     @Override

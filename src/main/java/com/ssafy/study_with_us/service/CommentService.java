@@ -33,12 +33,11 @@ public class CommentService {
         return result.entityToDto();
     }
 
-    // 세상에.. spring data jpa로 save()할 때 pk 같으면 update 되는거 까먹고 있었다
     @Transactional
     public Object update(CommentDto params) {
-        Comment comment = commentRepository.getById(params.getId());
+        Comment comment = commentRepository.getById(params.getCommentId());
         Comment result = commentRepository.save(Comment.builder()
-                .id(params.getId())
+                .id(params.getCommentId())
                 .content(params.getContent() == null ? comment.getContent() : params.getContent())
                 .study(comment.getStudy())
                 .member(comment.getMember())
@@ -49,7 +48,7 @@ public class CommentService {
 
     @Transactional
     public void delete(CommentDto params) {
-        commentRepository.delete(commentRepository.getById(params.getId()));
+        commentRepository.delete(commentRepository.getById(params.getCommentId()));
     }
 
     public Object getComments(Long studyId){

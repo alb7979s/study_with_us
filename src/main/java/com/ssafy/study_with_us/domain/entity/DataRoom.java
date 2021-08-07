@@ -5,12 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @Entity
 @Table(name = "data_room")
-public class DataRoom extends File{
+public class DataRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "data_room_id")
@@ -33,8 +32,7 @@ public class DataRoom extends File{
     }
 
     @Builder
-    public DataRoom(String sysName, String orgName, String path, LocalDateTime regTime, Long id, String subject, String content, Member member, Study study) {
-        super(sysName, orgName, path, regTime);
+    public DataRoom(Long id, String subject, String content, Member member, Study study) {
         this.id = id;
         this.subject = subject;
         this.content = content;
@@ -42,8 +40,7 @@ public class DataRoom extends File{
         this.study = study;
     }
 
-    private DataRoomDto entityToDto(){
-        return DataRoomDto.builder().id(id).subject(subject).content(content).sysName(getSysName()).orgName(getOrgName()).path(getPath()).regTime(getRegTime())
-                .member(member.entityToDto()).study(study.entityToDto()).build();
+    public DataRoomDto entityToDto(){
+        return DataRoomDto.builder().id(id).subject(subject).content(content).memberId(member.getId()).studyId(study.getId()).build();
     }
 }

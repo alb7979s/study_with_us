@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface StudyMemberRefRepositoryCustom {
     Object withdraw(IdReqDto params);
-    List<Study> getByMemberId(Long memberId);
+    List<Study> getByMemberId(Long memberId, Integer page);
     StudyMemberRef getStudyMember(Long memberId, Long studyId);
     List<StudyMemberRef> getRecentlyStudies(Long memberId);
 }

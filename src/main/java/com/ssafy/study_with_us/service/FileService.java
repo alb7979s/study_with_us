@@ -1,46 +1,33 @@
 package com.ssafy.study_with_us.service;
 
+import com.ssafy.study_with_us.domain.entity.DataRoom;
+import com.ssafy.study_with_us.domain.entity.FileEntity;
+import com.ssafy.study_with_us.domain.repository.FileRepository;
+import com.ssafy.study_with_us.dto.FileDto;
 import com.ssafy.study_with_us.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FileService {
-    private FileUtil fileUtil;
+    private final FileRepository fileRepository;
+    private final FileUtil fileUtil;
 
-    public FileService(FileUtil fileUtil) {
+    public FileService(FileRepository fileRepository, FileUtil fileUtil) {
+        this.fileRepository = fileRepository;
         this.fileUtil = fileUtil;
     }
 
-//    @Transactional
-//    public Member setThumbnail(Member member, MultipartFile mf) throws IOException {
-//        File file = fileUtil.makeDir("/member");
-//        File f = fileUtil.makeName(mf.getOriginalFilename(), file);
-//        mf.transferTo(f);	//파일 저장
-//        // 썸네일 저장
-//        Thumbnails.of(f)
-//                .size(300, 200)
-//                .toFile(new File(f.getParent(), "thumb_" + f.getName()));
-//        member.setProfilepath(f.getParent());
-//        member.setProfilename("thumb_" + f.getName());
-//        return member;
-//    }
-//    @Transactional
-//    public void setFiles(MultipartFile[] files, int boardNo) throws IOException, SQLException {
-//        File file = fileUtil.makeDir("/file");
-//        for(MultipartFile mf: files) {
-//            // file 생성
-//            String orgName = mf.getOriginalFilename();
-//            File f = fileUtil.makeName(orgName, file);
-//            mf.transferTo(f);
-//            // db 저장
-//            String contentType = fileUtil.getType(orgName);
-//            MyFile myFile = new MyFile(boardNo, mf.getSize(), f.getParent(), orgName, f.getName(), contentType);
-//            fileMapper.insertFile(myFile);
-//        }
-//        return;
-//    }
-//    public List<MyFile> getFiles(int boardNo) {
-//        return fileMapper.getFile(boardNo);
-//    }
+    public List<FileDto> create(List<MultipartFile> files, DataRoom dataRoom) throws IOException {
+        List<FileEntity> fileEntities = fileUtil.setFiles(files, dataRoom);
+        List<FileDto> results = new ArrayList<>();
+        for (FileEntity fileEntity : fileEntities) {
+            results.add(fileRepository.save(fileEntity).entityToDto());
+        }
+        return results;
+    }
 }
-

@@ -17,8 +17,8 @@ public class StudyThemeRefRepositoryImpl implements StudyThemeRefRepositoryCusto
     }
 
     @Override
-    public List<Long> searchStudyByThemes(List<String> themes) {
+    public List<Long> searchStudyByThemes(List<String> themes, Integer page) {
         return jpaQueryFactory.selectDistinct(studyThemeRef.study.id).from(studyThemeRef)
-                .where(studyThemeRef.theme.themeName.in(themes)).fetch();
+                .where(studyThemeRef.theme.themeName.in(themes)).offset((page-1)*6).limit(6).fetch();
     }
 }

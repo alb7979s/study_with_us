@@ -52,7 +52,7 @@ public class Comment {
                 '}';
     }
     public CommentDto entityToDto() {
-        return CommentDto.builder().id(id)
+        return CommentDto.builder().commentId(id)
                 .content(content)
                 .memberId(member.getId())
                 .studyId(study.getId())

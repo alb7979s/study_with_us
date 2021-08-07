@@ -23,9 +23,8 @@ public class ProfileController {
     }
 
     @GetMapping("/study")
-    public ResponseEntity<Resource> viewImg(@RequestParam Long id) throws IOException {
-        System.out.println("id = " + id);
-        Path path = new File(profileService.getProfile(id)).toPath();
+    public ResponseEntity<Resource> viewImg(@RequestParam Long studyId) throws IOException {
+        Path path = new File(profileService.getProfile(studyId)).toPath();
         return getResponseEntity(path);
     }
 

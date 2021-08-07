@@ -4,6 +4,7 @@ import com.ssafy.study_with_us.domain.entity.Profile;
 import com.ssafy.study_with_us.dto.FileReqDto;
 import com.ssafy.study_with_us.dto.IdReqDto;
 import com.ssafy.study_with_us.dto.StudyDto;
+import com.ssafy.study_with_us.dto.ThemesReqDto;
 import com.ssafy.study_with_us.service.ProfileService;
 import com.ssafy.study_with_us.service.StudyService;
 import com.ssafy.study_with_us.util.response.ApiResult;
@@ -56,17 +57,18 @@ public class StudyController {
     }
 
     @GetMapping("/detail")
-    public Object getDetail(@RequestParam Long id){
-        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY).dataType("study").data(studyService.getDetail(id)).build();
+    public Object getDetail(@RequestParam Long studyId){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_DETAIL).dataType("study").data(studyService.getDetail(studyId)).build();
     }
-    @GetMapping
-    public Object getStudyList(){
-        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY).dataType("studies").data(studyService.getStudyList()).build();
+    @GetMapping("/{page}")
+    public Object getStudyList(@PathVariable("page") Integer page){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_LIST).dataType("studies").data(studyService.getStudyList(page)).build();
     }
 
     @PostMapping("/search")
-    public Object searchStudyByThemes(@RequestBody Map<String, List<String>> params){
-        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_THEMES).dataType("themes").data(studyService.searchStudyByThemes(params.get("themes"))).build();
+    public Object searchStudyByThemes(@RequestBody ThemesReqDto params){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_THEMES).dataType("themes")
+                .data(studyService.searchStudyByThemes(params.getThemes(), params.getPage())).build();
     }
 
     @PostMapping("/connection")
@@ -83,7 +85,7 @@ public class StudyController {
     private StudyDto getStudyDtoAtFile(FileReqDto params) throws IOException {
         Profile profile = null;
         // 파일 정보 있으면 받은 정보로 생성
-        if (params.getFiles() != null) {
+        if (params.getFiles().size() > 0) {
             profile = profileService.studyProfileCreate(params.getFiles().get(0));
         }
         // study

@@ -1,5 +1,8 @@
 package com.ssafy.study_with_us.util;
 
+import com.ssafy.study_with_us.domain.entity.DataRoom;
+import com.ssafy.study_with_us.domain.entity.FileEntity;
+import com.ssafy.study_with_us.dto.FileDto;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -9,11 +12,15 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public class FileUtil {
+
     public File makeDir(String loc) {
         String uploadRoot = "c:/sweet_tomato/upload";
         String path = loc + new SimpleDateFormat("/yyyy/MM/dd").format(new Date());
@@ -46,8 +53,10 @@ public class FileUtil {
         mf.transferTo(f);
         return f;
     }
-    public void setFiles(MultipartFile[] files) throws IOException, SQLException {
+
+    public List<FileEntity> setFiles(List<MultipartFile> files, DataRoom dataRoom) throws IOException {
         File file = makeDir("/file");
+        List<FileEntity> fileEntities = new ArrayList<>();
         for(MultipartFile mf: files) {
             // file 생성
             String orgName = mf.getOriginalFilename();
@@ -55,10 +64,9 @@ public class FileUtil {
             mf.transferTo(f);
             // db 저장
             String contentType = getType(orgName);
-//            파일 저장시 정보들 저장해서 반환해주기
-//            MyFile myFile = new MyFile(boardNo, mf.getSize(), f.getParent(), orgName, f.getName(), contentType);
-//            fileMapper.insertFile(myFile);
+            fileEntities.add(FileEntity.builder().sysName(f.getName()).orgName(orgName).path(f.getParent() + "\\")
+                    .fileSize(mf.getSize()).contentType(contentType).regTime(LocalDateTime.now()).dataRoom(dataRoom).build());
         }
-        return;
+        return fileEntities;
     }
 }
