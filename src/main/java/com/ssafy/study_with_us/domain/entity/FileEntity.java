@@ -28,8 +28,8 @@ public class FileEntity {
     @Column(name = "file_size")
     private Long fileSize;
 
-    @Column(name = "content_type")
-    private String contentType;
+    @Column(name = "file_type")
+    private String fileType;
 
     @Column(name = "reg_time")
     private LocalDateTime regTime;
@@ -42,13 +42,13 @@ public class FileEntity {
     }
 
     @Builder
-    public FileEntity(Long id, String sysName, String orgName, String path, Long fileSize, String contentType, LocalDateTime regTime, DataRoom dataRoom) {
+    public FileEntity(Long id, String sysName, String orgName, String path, Long fileSize, String fileType, LocalDateTime regTime, DataRoom dataRoom) {
         this.id = id;
         this.sysName = sysName;
         this.orgName = orgName;
         this.path = path;
         this.fileSize = fileSize;
-        this.contentType = contentType;
+        this.fileType = fileType;
         this.regTime = regTime;
         this.dataRoom = dataRoom;
     }
@@ -61,13 +61,13 @@ public class FileEntity {
                 ", orgName='" + orgName + '\'' +
                 ", path='" + path + '\'' +
                 ", fileSize=" + fileSize +
-                ", contentType='" + contentType + '\'' +
+                ", contentType='" + fileType + '\'' +
                 ", regTime=" + regTime +
                 ", dataRoom=" + dataRoom +
                 '}';
     }
 
     public FileDto entityToDto(){
-        return FileDto.builder().id(id).sysName(sysName).orgName(orgName).path(path).fileSize(fileSize).contentType(contentType).regTime(regTime).dataRoom(dataRoom.entityToDto()).build();
+        return FileDto.builder().id(id).sysName(sysName).orgName(orgName).path(path).fileSize(fileSize).contentType(fileType).regTime(regTime).dataRoom(dataRoom.entityToDto()).build();
     }
 }

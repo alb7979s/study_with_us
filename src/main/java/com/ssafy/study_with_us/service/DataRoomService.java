@@ -1,6 +1,7 @@
 package com.ssafy.study_with_us.service;
 
 import com.ssafy.study_with_us.domain.entity.DataRoom;
+import com.ssafy.study_with_us.domain.entity.FileEntity;
 import com.ssafy.study_with_us.domain.repository.DataRoomRepository;
 import com.ssafy.study_with_us.domain.repository.MemberRepository;
 import com.ssafy.study_with_us.domain.repository.StudyRepository;
@@ -8,11 +9,13 @@ import com.ssafy.study_with_us.dto.DataRoomDto;
 import com.ssafy.study_with_us.dto.FileDto;
 import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class DataRoomService {
@@ -33,12 +36,10 @@ public class DataRoomService {
         DataRoom dataRoom = saveDataRoom(params);
         // 파일 저장
         fileService.create(files, dataRoom);
-        return DataRoomDto.builder().id(dataRoom.getId()).subject(dataRoom.getSubject()).content(dataRoom.getContent())
-                .memberId(dataRoom.getMember().getId()).studyId(dataRoom.getStudy().getId())
-                .build();
+        return dataRoom.entityToDto();
     }
 
-
+    @Transactional
     public DataRoomDto update(DataRoomDto params, List<MultipartFile> files) throws IOException {
         DataRoom getDataRoom = dataRoomRepository.getById(params.getId());
         DataRoom dataRoom = saveDataRoom(DataRoomDto.builder()
@@ -49,9 +50,9 @@ public class DataRoomService {
                 .studyId(getDataRoom.getStudy().getId())
                 .build());
         // file 수정 처리
-        // 있었는데 없어진거 제거
-        // 없었는데 있어진거 추가
-
+        // 게시물의 모든 첨부파일 목록 삭제하고, 받아온 데이터 다시 추가
+        dataRoomRepository.deleteFiles(dataRoom.getId());
+        fileService.create(files, dataRoom);
         return dataRoom.entityToDto();
     }
 
