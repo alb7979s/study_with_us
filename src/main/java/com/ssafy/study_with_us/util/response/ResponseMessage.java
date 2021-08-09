@@ -29,9 +29,10 @@ public class ResponseMessage {
     public static final String SEARCHED_MEMBER_TOMATOES = "멤버별 토마토 검색 성공";
     public static final String SEARCHED_STUDY_TOMATOES = "스터디별 토마토 검색 성공";
 
-    public static final String CREATED_DATA_ROOM = "자료실 글 작성 완료";
-    public static final String UPDATED_DATA_ROOM = "자료실 글 수정 완료";
-    public static final String SEARCHED_DATA_ROOM_LIST = "자료실 목록 조회 완료";
+    public static final String CREATED_DATA_ROOM = "자료실 글 작성 성공";
+    public static final String UPDATED_DATA_ROOM = "자료실 글 수정 성공";
+    public static final String SEARCHED_DATA_ROOM_LIST = "자료실 목록 조회 성공";
+    public static final String SEARCHED_DATA_ROOM_DETAIL = "자료실 세부 조회 성공";
     
 
     public static final String INTERNAL_SERVER_ERROR = "서버 내부 에러";

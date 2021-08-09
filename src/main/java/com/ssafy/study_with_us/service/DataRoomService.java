@@ -1,7 +1,6 @@
 package com.ssafy.study_with_us.service;
 
 import com.ssafy.study_with_us.domain.entity.DataRoom;
-import com.ssafy.study_with_us.domain.entity.FileEntity;
 import com.ssafy.study_with_us.domain.repository.DataRoomRepository;
 import com.ssafy.study_with_us.domain.repository.MemberRepository;
 import com.ssafy.study_with_us.domain.repository.StudyRepository;
@@ -14,8 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 @Service
 public class DataRoomService {
@@ -57,7 +57,9 @@ public class DataRoomService {
     }
 
     public Object getDetail(Long dataRoomId){
-        return null;
+        DataRoom dataRoom = dataRoomRepository.getById(dataRoomId);
+        List<FileDto> files = fileService.getFiles(dataRoomId);
+        return dataRoom.entityToDto(files);
     }
 
     public Object getDataRoomList(Long studyId){

@@ -61,13 +61,13 @@ public class FileEntity {
                 ", orgName='" + orgName + '\'' +
                 ", path='" + path + '\'' +
                 ", fileSize=" + fileSize +
-                ", contentType='" + fileType + '\'' +
+                ", fileType='" + fileType + '\'' +
                 ", regTime=" + regTime +
                 ", dataRoom=" + dataRoom +
                 '}';
     }
 
     public FileDto entityToDto(){
-        return FileDto.builder().id(id).sysName(sysName).orgName(orgName).path(path).fileSize(fileSize).contentType(fileType).regTime(regTime).dataRoom(dataRoom.entityToDto()).build();
+        return FileDto.builder().id(id).sysName(sysName).orgName(orgName).path(path).fileSize(fileSize).fileType(fileType).regTime(regTime).build();
     }
 }

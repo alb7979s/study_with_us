@@ -3,6 +3,8 @@ package com.ssafy.study_with_us.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class DataRoomDto{
     private Long id;
@@ -10,17 +12,18 @@ public class DataRoomDto{
     private String content;
     private Long memberId;
     private Long studyId;
-
+    private List<FileDto> files;
     public DataRoomDto() {
     }
 
     @Builder
-    public DataRoomDto(Long id, String subject, String content, Long memberId, Long studyId) {
+    public DataRoomDto(Long id, String subject, String content, Long memberId, Long studyId, List<FileDto> files) {
         this.id = id;
         this.subject = subject;
         this.content = content;
         this.memberId = memberId;
         this.studyId = studyId;
+        this.files = files;
     }
 
     @Override
@@ -31,6 +34,7 @@ public class DataRoomDto{
                 ", content='" + content + '\'' +
                 ", memberId=" + memberId +
                 ", studyId=" + studyId +
+                ", files=" + files +
                 '}';
     }
 }

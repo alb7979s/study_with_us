@@ -31,10 +31,9 @@ public class DataRoomController {
         .data(dataRoomService.update(getDataRoomDtoAtFile(params), params.getFiles())).build();
     }
 
-    @GetMapping("/detail")
-    public Object getDetail(@RequestParam Long dataRoomId){
-        dataRoomService.getDetail(dataRoomId);
-        return null;
+    @GetMapping("/detail/{dataRoomId}")
+    public Object getDetail(@PathVariable("dataRoomId") Long dataRoomId){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_DATA_ROOM_DETAIL).dataType("data_room").data(dataRoomService.getDetail(dataRoomId)).build();
     }
 
     @GetMapping

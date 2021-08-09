@@ -22,6 +22,11 @@ public class FileService {
         this.fileUtil = fileUtil;
     }
 
+    public FileEntity getFile(Long fileId){
+        return fileRepository.getById(fileId);
+//        return file.getPath() + file.getSysName();
+    }
+
     public List<FileDto> create(List<MultipartFile> files, DataRoom dataRoom) throws IOException {
         List<FileEntity> fileEntities = fileUtil.setFiles(files, dataRoom);
         List<FileDto> results = new ArrayList<>();
@@ -30,4 +35,14 @@ public class FileService {
         }
         return results;
     }
+
+    public List<FileDto> getFiles(Long dataRoomId){
+        List<FileEntity> files = fileRepository.getByDataRoomId(dataRoomId);
+        List<FileDto> results = new ArrayList<>();
+        for (FileEntity file : files) {
+            results.add(file.entityToDto());
+        }
+        return results;
+    }
+
 }
