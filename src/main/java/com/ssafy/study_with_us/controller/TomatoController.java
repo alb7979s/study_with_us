@@ -1,8 +1,10 @@
 package com.ssafy.study_with_us.controller;
 
 import com.ssafy.study_with_us.domain.entity.Tomato;
+import com.ssafy.study_with_us.domain.entity.TomatoPlan;
 import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.dto.TomatoDto;
+import com.ssafy.study_with_us.dto.TomatoPlanDto;
 import com.ssafy.study_with_us.service.TomatoService;
 import com.ssafy.study_with_us.util.response.ApiResult;
 import com.ssafy.study_with_us.util.response.ResponseMessage;
@@ -36,5 +38,21 @@ public class TomatoController {
     @GetMapping
     public Object getTomatoes(){
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_MEMBER_TOMATOES).dataType("tomatoes_by_member").data(tomatoService.getTomatoes()).build();
+    }
+
+    @PostMapping("/goal")
+    public Object addGoal(@RequestBody TomatoPlanDto params){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.CREATED_STUDY_TOMATO_GOAL).dataType("tomato_plan")
+                .data(tomatoService.addGoal(params)).build();
+    }
+    @PatchMapping("/goal")
+    public Object updateGoal(@RequestBody TomatoPlanDto params){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.UPDATED_STUDY_TOMATO_GOAL).dataType("tomato_plan")
+                .data(tomatoService.updateGoal(params)).build();
+    }
+    @GetMapping("/goal/{tomatoPlanId}")
+    public Object getGoal(@PathVariable("tomatoPlanId") Long tomatoPlanId){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_TOMATO_GOAL).dataType("tomato_plan")
+                .data(tomatoService.getGoal(tomatoPlanId)).build();
     }
 }
