@@ -1,7 +1,9 @@
 package com.ssafy.study_with_us.dto;
 
 import lombok.Builder;
+import lombok.Getter;
 
+@Getter
 public class BlacklistDto {
     private Long id;
     private StudyDto study;
