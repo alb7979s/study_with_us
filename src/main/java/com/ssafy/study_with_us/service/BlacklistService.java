@@ -10,7 +10,12 @@ import com.ssafy.study_with_us.domain.repository.StudyMemberRefRepository;
 import com.ssafy.study_with_us.domain.repository.StudyRepository;
 import com.ssafy.study_with_us.dto.IdReqDto;
 import com.ssafy.study_with_us.dto.StudyMemberDto;
+import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class BlacklistService {
@@ -26,6 +31,7 @@ public class BlacklistService {
         this.studyMemberRefRepository = studyMemberRefRepository;
     }
 
+    @Transactional
     public Object addBlacklist(IdReqDto params) {
         // 스터디 멤버 삭제
         studyMemberRefRepository.withdraw(params);
@@ -36,4 +42,22 @@ public class BlacklistService {
         return blacklist.entityToDto();
     }
 
+    @Transactional
+    public void deleteBlacklist(Long studyId){
+        blacklistRepository.delete(studyId, getMemberId());
+    }
+
+    public Object getBlacklist(){
+        List<Blacklist> blacklist = blacklistRepository.getByMemberId(getMemberId());
+        List<Long> studies = new ArrayList<>();
+        for (Blacklist black : blacklist) {
+            studies.add(black.getStudy().getId());
+        }
+        return studies;
+    }
+
+    private Long getMemberId() {
+        String s = SecurityUtil.getCurrentUsername().get();
+        return memberRepository.findByEmail(s).get().getId();
+    }
 }

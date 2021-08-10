@@ -21,8 +21,15 @@ public class BlacklistController {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.ADDED_BLACKLIST).dataType("blacklist").data(blacklistService.addBlacklist(params)).build();
     }
 
-    @DeleteMapping
-    public Object deleteBlacklist(){
-        
+    @DeleteMapping("{studyId}")
+    public Object deleteBlacklist(@PathVariable("studyId") Long studyId){
+        blacklistService.deleteBlacklist(studyId);
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.DELETED_BLACKLIST).build();
+    }
+
+    @GetMapping
+    public Object getBlacklist(){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_BLACKLIST).dataType("blacklist_studies")
+                .data(blacklistService.getBlacklist()).build();
     }
 }
