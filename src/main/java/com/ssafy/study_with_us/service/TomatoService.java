@@ -6,7 +6,6 @@ import com.ssafy.study_with_us.domain.repository.MemberRepository;
 import com.ssafy.study_with_us.domain.repository.StudyRepository;
 import com.ssafy.study_with_us.domain.repository.TomatoPlanRepository;
 import com.ssafy.study_with_us.domain.repository.TomatoRepository;
-import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.dto.TomatoDto;
 import com.ssafy.study_with_us.dto.TomatoPlanDto;
 import com.ssafy.study_with_us.dto.TomatoResDto;
@@ -33,7 +32,7 @@ public class TomatoService {
 
     public Object addTomato(TomatoDto params){
         // 여기서 tomato null이면 만들어주고 아니면 count + 1 해줌
-        Tomato tomato = tomatoRepository.addTomato(TomatoDto.builder().memberId(getMemberId())
+        Tomato tomato = tomatoRepository.searchTomato(TomatoDto.builder().memberId(getMemberId())
                 .studyId(params.getStudyId()).date(LocalDate.now()).build());
         Tomato result = null;
         if(tomato == null) {

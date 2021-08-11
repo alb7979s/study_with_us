@@ -46,9 +46,9 @@ public class DataRoom {
     }
 
     public DataRoomDto entityToDto(){
-        return DataRoomDto.builder().id(id).subject(subject).content(content).memberId(member.getId()).studyId(study.getId()).build();
+        return DataRoomDto.builder().id(id).subject(subject).content(content).member(member.entityToDto()).studyId(study.getId()).build();
     }
     public DataRoomDto entityToDto(List<FileDto> files){
-        return DataRoomDto.builder().id(id).subject(subject).content(content).memberId(member.getId()).studyId(study.getId()).files(files).build();
+        return DataRoomDto.builder().id(id).subject(subject).content(content).member(member.entityToDto()).studyId(study.getId()).files(files).build();
     }
 }

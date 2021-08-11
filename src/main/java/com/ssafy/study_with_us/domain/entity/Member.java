@@ -36,9 +36,6 @@ public class Member {
     @Column(length = 30)
     private String department;
 
-    @Column
-    private LocalDateTime studytime;
-
     @ManyToMany
     @JoinTable(
             name = "member_authority",
@@ -52,13 +49,13 @@ public class Member {
     private MemberProfile profile;
 
     @Builder
-    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile, LocalDateTime studytime) {
-        this(id, email, password, username, age, department, profile, studytime, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
+    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile) {
+        this(id, email, password, username, age, department, profile, Collections.singleton(Authority.builder().authorityName("ROLE_USER").build()));
 //        this(id, email, password, name, nickname, age, group, studytime, Collections.singleton(MemberAuthorityRef.builder().authority(Authority.builder().authorityName("ROLE_USER").build()));
     }
 
     @Builder
-    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile, LocalDateTime studytime, Set<Authority> authorities) {
+    public Member(Long id, String email, String password, String username, Integer age, String department, MemberProfile profile, Set<Authority> authorities) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -66,7 +63,6 @@ public class Member {
         this.age = age;
         this.department = department;
         this.profile = profile;
-        this.studytime = studytime;
         this.authorities = authorities;
     }
     public Member() {

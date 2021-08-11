@@ -1,19 +1,19 @@
 package com.ssafy.study_with_us.controller;
 
 import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.dto.FileReqDto;
-import com.ssafy.study_with_us.dto.IdReqDto;
-import com.ssafy.study_with_us.dto.StudyDto;
-import com.ssafy.study_with_us.dto.ThemesReqDto;
+import com.ssafy.study_with_us.dto.*;
 import com.ssafy.study_with_us.service.ProfileService;
 import com.ssafy.study_with_us.service.StudyService;
 import com.ssafy.study_with_us.util.response.ApiResult;
 import com.ssafy.study_with_us.util.response.ResponseMessage;
 import com.ssafy.study_with_us.util.response.StatusCode;
 import org.json.JSONObject;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,27 @@ public class StudyController {
     @GetMapping("/recently")
     public Object getRecentlyStudies(){
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_RECENTLY_STUDIES).dataType("study").data(studyService.getRecentlyStudies()).build();
+    }
 
+    @GetMapping("/schedule/{yearMonth}")
+    public Object getSchedules(@PathVariable("yearMonth") String yearMonth,
+                                  @RequestParam Long studyId){
+        LocalDate startDate = LocalDate.parse(yearMonth+"01", DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_SCHEDULE).dataType("schedules").data(studyService.getSchedules(studyId, startDate)).build();
+    }
+    @PostMapping("/schedule")
+    public Object createSchedule(@RequestBody ScheduleDto params){
+        System.out.println("params = " + params);
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.CREATED_SCHEDULE).dataType("schedule").data(studyService.saveSchedule(params)).build();
+    }
+    @PatchMapping("/schedule")
+    public Object updateSchedule(@RequestBody ScheduleDto params){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.UPDATED_SCHEDULE).dataType("schedule").data(studyService.saveSchedule(params)).build();
+    }
+    @DeleteMapping("/schedule/{scheduleId}")
+    public Object deleteSchedule(@PathVariable("scheduleId") Long scheduleId){
+        studyService.deleteSchedule(scheduleId);
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.DELETED_SCHEDULE).build();
     }
 
     private StudyDto getStudyDtoAtFile(FileReqDto params) throws IOException {

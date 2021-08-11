@@ -7,7 +7,7 @@ import com.ssafy.study_with_us.dto.TomatoDto;
 import java.util.List;
 
 public interface TomatoRepositoryCustom {
-    Tomato addTomato(TomatoDto params);
+    Tomato searchTomato(TomatoDto params);
     Integer getTotalSum();
     Integer getRelevantSum(TomatoDto params);
     Integer getRelevantSum(Long memberId);

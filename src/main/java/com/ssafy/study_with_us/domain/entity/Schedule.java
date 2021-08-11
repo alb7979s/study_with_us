@@ -1,5 +1,6 @@
 package com.ssafy.study_with_us.domain.entity;
 
+import com.ssafy.study_with_us.dto.ScheduleDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,12 +15,11 @@ public class Schedule {
     @Column(name = "schedule_id")
     private Long id;
 
-    @Column
-    private LocalDate date;
-    @Column(name = "title", nullable = false)
-    private String title;
-    @Column(name = "content", columnDefinition = "TEXT")
-    private String content;
+    @Column(name = "schedule_date")
+    private LocalDate scheduleDate;
+
+    @Column(name = "info", nullable = false)
+    private String info;
 
     @ManyToOne
     @JoinColumn(name = "study_id")
@@ -29,22 +29,13 @@ public class Schedule {
     }
 
     @Builder
-    public Schedule(Long id, LocalDate date, String title, String content, Study study) {
+    public Schedule(Long id, LocalDate scheduleDate, String info, Study study) {
         this.id = id;
-        this.date = date;
-        this.title = title;
-        this.content = content;
+        this.scheduleDate = scheduleDate;
+        this.info = info;
         this.study = study;
     }
-
-    @Override
-    public String toString() {
-        return "Schedule{" +
-                "id=" + id +
-                ", date=" + date +
-                ", title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", study=" + study +
-                '}';
+    public ScheduleDto entityToDto(){
+        return ScheduleDto.builder().scheduleId(id).scheduleDate(scheduleDate).info(info).studyId(study.getId()).build();
     }
 }

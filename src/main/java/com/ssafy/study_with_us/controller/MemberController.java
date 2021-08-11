@@ -3,10 +3,8 @@ package com.ssafy.study_with_us.controller;
 import com.ssafy.study_with_us.domain.entity.Member;
 import com.ssafy.study_with_us.domain.entity.MemberProfile;
 import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.dto.FileReqDto;
-import com.ssafy.study_with_us.dto.MemberDto;
-import com.ssafy.study_with_us.dto.MemberResDto;
-import com.ssafy.study_with_us.dto.ProfileDto;
+import com.ssafy.study_with_us.domain.entity.StudyTime;
+import com.ssafy.study_with_us.dto.*;
 import com.ssafy.study_with_us.service.AuthorityService;
 import com.ssafy.study_with_us.service.MailService;
 import com.ssafy.study_with_us.service.MemberService;
@@ -87,7 +85,7 @@ public class MemberController {
 //            ProfileDto profileDto = new ProfileDto(memberProfile.getId(), memberProfile.getImage(), memberProfile.getThumbnail(), memberProfile.getPath());
 //            MemberDto memberDto = new MemberDto(member.getId(), member.getEmail(), member.getPassword(), member.getUsername(), member.getAge(), member.getDepartment(), member.getStudytime(), profileDto);
             ProfileDto profileDto = ProfileDto.builder().id(memberProfile.getId()).imageOrgName(memberProfile.getImageOrgName()).image(memberProfile.getImage()).thumbnail(memberProfile.getThumbnail()).path(memberProfile.getPath()).build();
-            memberResDto = MemberResDto.builder().id(member.getId()).age(member.getAge()).department(member.getDepartment()).email(member.getEmail()).password(member.getPassword()).username(member.getUsername()).studytime(member.getStudytime()).profile(profileDto).build();
+            memberResDto = MemberResDto.builder().id(member.getId()).age(member.getAge()).department(member.getDepartment()).email(member.getEmail()).password(member.getPassword()).username(member.getUsername()).profile(profileDto).build();
         }catch (Exception e){
             return ApiResult.builder().status(StatusCode.UNAUTHORIZED).message(ResponseMessage.NOT_FOUND_MEMBER).dataType("String").data(email).build();
         }
@@ -108,4 +106,18 @@ public class MemberController {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.PWD_MAIL_SUCCESS).dataType("String").data(msg).build();
     }
 
+    @GetMapping("/studycheck/{studyId}")
+    public Object isStudy(@PathVariable("studyId") Long studyId){
+        return memberService.isStudy(studyId);
+    }
+
+    @PostMapping("/time")
+    public Object addTime(@RequestBody StudyTimeDto params){
+//      후에 params.getStudyTime() == null 이면 예외처리 해줘야함
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.ADDED_STUDY_TIME).dataType("member_study").data(memberService.addTime(params)).build();
+    }
+    @GetMapping("/time")
+    public Object getTimeList(){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_TIME_LIST).dataType("study_time_list").data(memberService.getTimeList()).build();
+    }
 }

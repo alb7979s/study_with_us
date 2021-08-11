@@ -13,9 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class DataRoomService {
@@ -46,7 +44,7 @@ public class DataRoomService {
                 .id(getDataRoom.getId())
                 .subject(params.getSubject() == null ? getDataRoom.getSubject() : params.getSubject())
                 .content(params.getContent() == null ? getDataRoom.getContent() : params.getContent())
-                .memberId(getDataRoom.getMember().getId())
+                .member(getDataRoom.getMember().entityToDto())
                 .studyId(getDataRoom.getStudy().getId())
                 .build());
         // file 수정 처리

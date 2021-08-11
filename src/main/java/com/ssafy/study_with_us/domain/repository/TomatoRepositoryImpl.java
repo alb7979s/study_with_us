@@ -21,7 +21,7 @@ public class TomatoRepositoryImpl implements TomatoRepositoryCustom {
     }
 
     @Override
-    public Tomato addTomato(TomatoDto params) {
+    public Tomato searchTomato(TomatoDto params) {
         return jpaQueryFactory.selectFrom(tomato)
                 .where(memberIdEq(params.getMemberId()), studyIdEq(params.getStudyId()), tomatoDateEq(params.getDate()))
                 .fetchOne();

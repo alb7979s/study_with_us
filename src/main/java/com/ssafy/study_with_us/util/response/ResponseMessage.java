@@ -19,6 +19,12 @@ public class ResponseMessage {
     public static final String SEARCHED_STUDY_THEMES = "스터디 테마 검색 성공";
     public static final String CONNECTED_STUDY = "스터디 입장 성공";
     public static final String SEARCHED_RECENTLY_STUDIES = "최근 스터디 조회";
+    public static final String ADDED_STUDY_TIME = "스터디 시간 추가 성공";
+    public static final String SEARCHED_STUDY_TIME_LIST = "스터디 시간 리스트 조회 성공";
+    public static final String CREATED_SCHEDULE = "스케줄 생성 성공";
+    public static final String UPDATED_SCHEDULE = "스케줄 수정 성공";
+    public static final String DELETED_SCHEDULE = "스케줄 삭제 성공";
+    public static final String SEARCHED_SCHEDULE = "스케줄 조회 성공";
 
 
     public static final String CREATED_COMMENT = "댓글 생성 성공";

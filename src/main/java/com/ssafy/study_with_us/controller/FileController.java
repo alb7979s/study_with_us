@@ -32,7 +32,7 @@ public class FileController {
         FileSystemResource resource = new FileSystemResource(path);
         return ResponseEntity.ok()
 //                .contentType(MediaType.parseMediaType(Files.probeContentType(path)))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + new String(file.getOrgName().getBytes("UTF-8"), "ISO-8859-1") + "\"")
                 .body(resource);
     }
 
