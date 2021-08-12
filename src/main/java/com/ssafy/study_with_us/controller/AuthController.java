@@ -61,7 +61,7 @@ public class AuthController {
                 .username(entity.getUsername())
                 .age(entity.getAge())
                 .department(entity.getDepartment())
-                .profile(ProfileDto.builder().id(profile.getId()).image(profile.getImage()).path(profile.getPath()).thumbnail(profile.getThumbnail()).imageOrgName(profile.getImageOrgName()).build())
+                .profile(profile == null ? null : ProfileDto.builder().id(profile.getId()).image(profile.getImage()).path(profile.getPath()).thumbnail(profile.getThumbnail()).imageOrgName(profile.getImageOrgName()).build())
                 .build();
 
         map.put("member", dto);

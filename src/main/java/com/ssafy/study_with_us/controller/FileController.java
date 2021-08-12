@@ -25,6 +25,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
+    // fileId 없으면 예외처리 해줘야함
     @GetMapping("download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable("fileId") Long fileId) throws IOException {
         FileEntity file = fileService.getFile(fileId);

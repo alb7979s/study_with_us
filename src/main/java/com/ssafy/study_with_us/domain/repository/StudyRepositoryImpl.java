@@ -1,15 +1,15 @@
 package com.ssafy.study_with_us.domain.repository;
 
-import com.querydsl.jpa.impl.JPADeleteClause;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.study_with_us.domain.entity.*;
-import com.ssafy.study_with_us.dto.StudyDto;
+import com.ssafy.study_with_us.domain.entity.StudyProfile;
+import com.ssafy.study_with_us.domain.entity.Theme;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.ssafy.study_with_us.domain.entity.QStudy.*;
-import static com.ssafy.study_with_us.domain.entity.QStudyThemeRef.*;
+import static com.ssafy.study_with_us.domain.entity.QStudy.study;
+import static com.ssafy.study_with_us.domain.entity.QStudyThemeRef.studyThemeRef;
 import static com.ssafy.study_with_us.domain.entity.QTheme.theme;
 
 @Repository
@@ -35,10 +35,16 @@ public class StudyRepositoryImpl implements StudyRepositoryCustom{
         return jpaQueryFactory.select(study.profile).from(study).where(study.id.eq(studyId)).fetchOne();
     }
 
-    // 좀 더 효율적으로 가능할듯 후에 수정
     @Override
-    public void remove(String theme, Long studyID) {
-        jpaQueryFactory.delete(studyThemeRef).where(studyThemeRef.theme.themeName.eq(theme), studyThemeRef.study.id.eq(studyID)).execute();
+    public void remove(String theme, Long studyId) {
+        jpaQueryFactory.delete(studyThemeRef).where(themeNameEq(theme), studyIdEq(studyId)).execute();
+    }
+
+    private BooleanExpression themeNameEq(String theme){
+        return theme == null ? null : studyThemeRef.theme.themeName.eq(theme);
+    }
+    private BooleanExpression studyIdEq(Long studyId){
+        return studyId == null ? null : studyThemeRef.study.id.eq(studyId);
     }
 
 }

@@ -60,7 +60,7 @@ public class Study {
     }
     public StudyDto entityToDto(){
         return StudyDto.builder().id(id).studyName(studyName).studyIntro(studyIntro).studyLeader(studyLeader)
-                .security(security).profile(profile.entityToDto()).build();
+                .security(security).profile(profile == null ? null : profile.entityToDto()).build();
     }
     public Set<String> listToSet(){
         Set<String> results = new HashSet<>();

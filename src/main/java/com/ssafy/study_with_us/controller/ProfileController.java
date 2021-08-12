@@ -1,5 +1,6 @@
 package com.ssafy.study_with_us.controller;
 
+import com.ssafy.study_with_us.domain.entity.Profile;
 import com.ssafy.study_with_us.service.ProfileService;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
@@ -22,15 +23,20 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
+    // profile 없을 때 예외처리
     @GetMapping("/study")
-    public ResponseEntity<Resource> viewImg(@RequestParam Long studyId) throws IOException {
-        Path path = new File(profileService.getProfile(studyId)).toPath();
+    public ResponseEntity<Resource> viewProfileImg(@RequestParam Long studyId) throws IOException {
+        String profile = profileService.getProfile(studyId, null);
+        if(profile == null) return ResponseEntity.noContent().build();
+        Path path = new File(profile).toPath();
         return getResponseEntity(path);
     }
 
-    @GetMapping
-    public ResponseEntity<Resource> viewImg() throws IOException {
-        Path path = new File(profileService.getProfile(null)).toPath();
+    @GetMapping("/{memberId}")
+    public ResponseEntity<Resource> viewMemberImg(@PathVariable("memberId") Long memberId) throws IOException {
+        String profile = profileService.getProfile(null, memberId);
+        if(profile == null) return ResponseEntity.noContent().build();
+        Path path = new File(profile).toPath();
         return getResponseEntity(path);
     }
 

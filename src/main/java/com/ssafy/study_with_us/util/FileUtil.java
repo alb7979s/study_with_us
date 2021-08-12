@@ -58,6 +58,7 @@ public class FileUtil {
         File file = makeDir("/file");
         List<FileEntity> fileEntities = new ArrayList<>();
         for(MultipartFile mf: files) {
+            if(mf.getSize() == 0) continue;
             // file 생성
             String orgName = mf.getOriginalFilename();
             File f = makeName(orgName, file);

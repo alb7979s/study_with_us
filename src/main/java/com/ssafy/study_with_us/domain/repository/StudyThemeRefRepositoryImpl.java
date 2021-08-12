@@ -1,12 +1,12 @@
 package com.ssafy.study_with_us.domain.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.study_with_us.domain.entity.QStudyThemeRef;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.ssafy.study_with_us.domain.entity.QStudyThemeRef.*;
+import static com.ssafy.study_with_us.domain.entity.QStudyThemeRef.studyThemeRef;
 
 @Repository
 public class StudyThemeRefRepositoryImpl implements StudyThemeRefRepositoryCustom {
@@ -19,6 +19,9 @@ public class StudyThemeRefRepositoryImpl implements StudyThemeRefRepositoryCusto
     @Override
     public List<Long> searchStudyByThemes(List<String> themes, Integer page) {
         return jpaQueryFactory.selectDistinct(studyThemeRef.study.id).from(studyThemeRef)
-                .where(studyThemeRef.theme.themeName.in(themes)).offset((page-1)*6).limit(6).fetch();
+                .where(themeNameIn(themes)).offset((page-1)*6).limit(6).fetch();
+    }
+    private BooleanExpression themeNameIn(List<String> themes){
+        return themes == null ? null : studyThemeRef.theme.themeName.in(themes);
     }
 }

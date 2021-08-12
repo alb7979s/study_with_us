@@ -1,34 +1,27 @@
 package com.ssafy.study_with_us.controller;
 
-import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.dto.*;
-import com.ssafy.study_with_us.service.ProfileService;
+import com.ssafy.study_with_us.dto.FileReqDto;
+import com.ssafy.study_with_us.dto.IdReqDto;
+import com.ssafy.study_with_us.dto.ScheduleDto;
+import com.ssafy.study_with_us.dto.ThemesReqDto;
 import com.ssafy.study_with_us.service.StudyService;
 import com.ssafy.study_with_us.util.response.ApiResult;
 import com.ssafy.study_with_us.util.response.ResponseMessage;
 import com.ssafy.study_with_us.util.response.StatusCode;
-import org.json.JSONObject;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 @RestController
 @RequestMapping("/study")
 public class StudyController {
     private final StudyService studyService;
-    private final ProfileService profileService;
 
-    public StudyController(StudyService studyService, ProfileService profileService) {
+    public StudyController(StudyService studyService) {
         this.studyService = studyService;
-        this.profileService = profileService;
     }
 
     // 멤버가 직접 가입 하는거
@@ -47,13 +40,13 @@ public class StudyController {
     @PostMapping
     public Object create(FileReqDto params) throws IOException {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.CREATED_STUDY).dataType("study")
-                .data(studyService.create(getStudyDtoAtFile(params))).build();
+                .data(studyService.create(params)).build();
     }
 
     @PatchMapping
     public Object update(FileReqDto params) throws IOException {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.UPDATED_STUDY)
-                .data(studyService.update(getStudyDtoAtFile(params))).build();
+                .data(studyService.update(params)).build();
     }
 
     @GetMapping("/detail")
@@ -102,28 +95,4 @@ public class StudyController {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.DELETED_SCHEDULE).build();
     }
 
-    private StudyDto getStudyDtoAtFile(FileReqDto params) throws IOException {
-        Profile profile = null;
-        // 파일 정보 있으면 받은 정보로 생성
-        if (params.getFiles().size() > 0) {
-            profile = profileService.studyProfileCreate(params.getFiles().get(0));
-        }
-        // study
-        JSONObject jObject = new JSONObject(params.getJsonData());
-        Set<String> themes = new HashSet<>();
-        //themes
-        if (jObject.has("themes")){
-            for (Object theme : jObject.getJSONArray("themes")) {
-                themes.add((String) theme);
-            }
-        };
-        return StudyDto.builder()
-                .id(jObject.has("id") ? jObject.getLong("id") : null)
-                .studyName(jObject.has("studyName") ? jObject.getString("studyName") : null)
-                .studyIntro(jObject.has("studyIntro") ? jObject.getString("studyIntro") : null)
-                .security(jObject.has("security") ? jObject.getString("security") : null)
-                .themes(themes)
-                .profile(profile.entityToDto())
-                .build();
-    }
 }
