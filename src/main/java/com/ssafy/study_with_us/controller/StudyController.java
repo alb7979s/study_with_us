@@ -5,9 +5,9 @@ import com.ssafy.study_with_us.dto.IdReqDto;
 import com.ssafy.study_with_us.dto.ScheduleDto;
 import com.ssafy.study_with_us.dto.ThemesReqDto;
 import com.ssafy.study_with_us.service.StudyService;
-import com.ssafy.study_with_us.util.response.ApiResult;
-import com.ssafy.study_with_us.util.response.ResponseMessage;
-import com.ssafy.study_with_us.util.response.StatusCode;
+import com.ssafy.study_with_us.response.ApiResult;
+import com.ssafy.study_with_us.response.ResponseMessage;
+import com.ssafy.study_with_us.response.StatusCode;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;

@@ -3,9 +3,9 @@ package com.ssafy.study_with_us.controller;
 import com.ssafy.study_with_us.dto.DataRoomDto;
 import com.ssafy.study_with_us.dto.FileReqDto;
 import com.ssafy.study_with_us.service.DataRoomService;
-import com.ssafy.study_with_us.util.response.ApiResult;
-import com.ssafy.study_with_us.util.response.ResponseMessage;
-import com.ssafy.study_with_us.util.response.StatusCode;
+import com.ssafy.study_with_us.response.ApiResult;
+import com.ssafy.study_with_us.response.ResponseMessage;
+import com.ssafy.study_with_us.response.StatusCode;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 

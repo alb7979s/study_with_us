@@ -5,6 +5,7 @@ import com.ssafy.study_with_us.domain.repository.*;
 import com.ssafy.study_with_us.dto.*;
 import com.ssafy.study_with_us.util.SecurityUtil;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,10 +13,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class StudyService {
@@ -27,8 +25,9 @@ public class StudyService {
     private final ScheduleRepository scheduleRepository;
     private final ProfileRepository profileRepository;
     private final ProfileService profileService;
+    private final Long pagingSize;
 
-    public StudyService(StudyRepository studyRepository, MemberRepository memberRepository, ThemeRepository themeRepository, StudyThemeRefRepository studyThemeRefRepository, StudyMemberRefRepository studyMemberRefRepository, ScheduleRepository scheduleRepository, ProfileRepository profileRepository, ProfileService profileService) {
+    public StudyService(StudyRepository studyRepository, MemberRepository memberRepository, ThemeRepository themeRepository, StudyThemeRefRepository studyThemeRefRepository, StudyMemberRefRepository studyMemberRefRepository, ScheduleRepository scheduleRepository, ProfileRepository profileRepository, ProfileService profileService, @Value("${paging.size}") Long pagingSize) {
         this.studyRepository = studyRepository;
         this.memberRepository = memberRepository;
         this.themeRepository = themeRepository;
@@ -37,6 +36,7 @@ public class StudyService {
         this.scheduleRepository = scheduleRepository;
         this.profileRepository = profileRepository;
         this.profileService = profileService;
+        this.pagingSize = pagingSize;
     }
 
     // 가입, params.memberId null이면 직접 가입 => 토큰에서 정보 얻어옴, null이 아니면 초대 => 받은 아이디 정보로 가입
@@ -129,8 +129,11 @@ public class StudyService {
                 .build();
     }
 
-    public List<StudyDto> getStudyList(Integer page){
-        List<Study> studies = studyMemberRefRepository.getByMemberId(getMemberId(), page);
+    public Object getStudyList(Integer page){
+        List<Study> studies = studyRepository.getPublicStudies(page);
+        Long studyCnt = studyRepository.getPublicStudiesCount();
+        Long totalPage = studyCnt / pagingSize + (studyCnt % pagingSize == 0 ? 0 : 1);
+        Map<String, Object> map = new HashMap<>();
         List<StudyDto> results = new ArrayList<>();
         for (Study study : studies) {
             Profile profile = study.getProfile();
@@ -141,7 +144,9 @@ public class StudyService {
                     .profile(profile == null ? null :profile.entityToDto())
                     .build());
         }
-        return results;
+        map.put("studies", results);
+        map.put("totalPage", totalPage);
+        return map;
     }
     private void removeThemes(Set<String> deleteThemes, Study study) {
         for (String deleteTheme : deleteThemes) {
@@ -166,13 +171,18 @@ public class StudyService {
         }
     }
 
-    public List<StudyDto> searchStudyByThemes(List<String> themes, Integer page){
+    public Object searchStudyByThemes(List<String> themes, Integer page){
         List<Long> studyIds = studyThemeRefRepository.searchStudyByThemes(themes, page);
+        Long studyCnt = studyThemeRefRepository.countStudyByThemes(themes);
+        Long totalPage = studyCnt / pagingSize + (studyCnt % pagingSize == 0 ? 0 : 1);
+        Map<String, Object> map = new HashMap<>();
         List<StudyDto> results = new ArrayList<>();
         for (Long studyId : studyIds) {
             results.add(getDetail(studyId));
         }
-        return results;
+        map.put("studies", results);
+        map.put("totalPage", totalPage);
+        return map;
     }
 
     public StudyMemberDto connectStudy(Long studyId){

@@ -3,15 +3,14 @@ package com.ssafy.study_with_us.controller;
 import com.ssafy.study_with_us.domain.entity.Member;
 import com.ssafy.study_with_us.domain.entity.MemberProfile;
 import com.ssafy.study_with_us.domain.entity.Profile;
-import com.ssafy.study_with_us.domain.entity.StudyTime;
 import com.ssafy.study_with_us.dto.*;
 import com.ssafy.study_with_us.service.AuthorityService;
 import com.ssafy.study_with_us.service.MailService;
 import com.ssafy.study_with_us.service.MemberService;
 import com.ssafy.study_with_us.service.ProfileService;
-import com.ssafy.study_with_us.util.response.ApiResult;
-import com.ssafy.study_with_us.util.response.ResponseMessage;
-import com.ssafy.study_with_us.util.response.StatusCode;
+import com.ssafy.study_with_us.response.ApiResult;
+import com.ssafy.study_with_us.response.ResponseMessage;
+import com.ssafy.study_with_us.response.StatusCode;
 import org.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 

@@ -19,15 +19,13 @@ public class ProfileService {
     private final MemberProfileRepository memberProfileRepository;
     private final MemberRepository memberRepository;
     private final StudyRepository studyRepository;
-    private final ProfileRepository profileRepository;
     private final FileUtil fileUtil;
 
-    public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, MemberRepository memberRepository, StudyRepository studyRepository, ProfileRepository profileRepository, FileUtil fileUtil) {
+    public ProfileService(StudyProfileRepository studyProfileRepository, MemberProfileRepository memberProfileRepository, MemberRepository memberRepository, StudyRepository studyRepository, FileUtil fileUtil) {
         this.studyProfileRepository = studyProfileRepository;
         this.memberProfileRepository = memberProfileRepository;
         this.memberRepository = memberRepository;
         this.studyRepository = studyRepository;
-        this.profileRepository = profileRepository;
         this.fileUtil = fileUtil;
     }
 

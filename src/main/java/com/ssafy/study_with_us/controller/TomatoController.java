@@ -1,14 +1,11 @@
 package com.ssafy.study_with_us.controller;
 
-import com.ssafy.study_with_us.domain.entity.Tomato;
-import com.ssafy.study_with_us.domain.entity.TomatoPlan;
-import com.ssafy.study_with_us.dto.StudyDto;
 import com.ssafy.study_with_us.dto.TomatoDto;
 import com.ssafy.study_with_us.dto.TomatoPlanDto;
 import com.ssafy.study_with_us.service.TomatoService;
-import com.ssafy.study_with_us.util.response.ApiResult;
-import com.ssafy.study_with_us.util.response.ResponseMessage;
-import com.ssafy.study_with_us.util.response.StatusCode;
+import com.ssafy.study_with_us.response.ApiResult;
+import com.ssafy.study_with_us.response.ResponseMessage;
+import com.ssafy.study_with_us.response.StatusCode;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,9 +28,9 @@ public class TomatoController {
     }
     
     // 일단 토마토 테스트 할라고 여기 만들었는데, 멤버, 스터디 세부 검색 하는곳으로 이동 예정
-    @GetMapping("/study/{tomatoId}")
-    public Object getTomatoes(@PathVariable("tomatoId") Long tomatoId){
-        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_TOMATOES).dataType("tomatoes_by_study").data(tomatoService.getTomatoes(TomatoDto.builder().id(tomatoId).build())).build();
+    @GetMapping("/study/{studyId}")
+    public Object getTomatoes(@PathVariable("studyId") Long studyId){
+        return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.SEARCHED_STUDY_TOMATOES).dataType("tomatoes_by_study").data(tomatoService.getTomatoes(TomatoDto.builder().studyId(studyId).build())).build();
     }
     @GetMapping
     public Object getTomatoes(){

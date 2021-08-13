@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.study_with_us.domain.entity.Study;
 import com.ssafy.study_with_us.domain.entity.StudyMemberRef;
 import com.ssafy.study_with_us.dto.IdReqDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,9 +15,11 @@ import static com.ssafy.study_with_us.domain.entity.QStudyMemberRef.studyMemberR
 @Repository
 public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+    private final Long recentlyPagingSize;
 
-    public StudyMemberRefRepositoryImpl(JPAQueryFactory jpaQueryFactory) {
+    public StudyMemberRefRepositoryImpl(JPAQueryFactory jpaQueryFactory, @Value("${recently.paging.size}")Long recentlyPagingSize) {
         this.jpaQueryFactory = jpaQueryFactory;
+        this.recentlyPagingSize = recentlyPagingSize;
     }
 
     @Override
@@ -26,10 +29,6 @@ public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCus
                 .execute();
     }
 
-    public List<Study> getByMemberId(Long memberId, Integer page){
-        return jpaQueryFactory.select(studyMemberRef.study).from(studyMemberRef).where(memberIdEq(memberId)).offset((page-1)*6).limit(6).fetch();
-    }
-
     @Override
     public StudyMemberRef getStudyMember(Long memberId, Long studyId) {
         return jpaQueryFactory.selectFrom(studyMemberRef).where(memberIdEq(memberId), studyIdEq(studyId)).fetchOne();
@@ -37,7 +36,7 @@ public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCus
 
     @Override
     public List<StudyMemberRef> getRecentlyStudies(Long memberId) {
-        return jpaQueryFactory.selectFrom(studyMemberRef).where(memberIdEq(memberId), studyMemberRef.recentlyConnectionTime.isNotNull()).orderBy(studyMemberRef.recentlyConnectionTime.desc()).limit(3).fetch();
+        return jpaQueryFactory.selectFrom(studyMemberRef).where(memberIdEq(memberId), studyMemberRef.recentlyConnectionTime.isNotNull()).orderBy(studyMemberRef.recentlyConnectionTime.desc()).limit(recentlyPagingSize).fetch();
     }
 
     private BooleanExpression studyIdEq(Long studyId){

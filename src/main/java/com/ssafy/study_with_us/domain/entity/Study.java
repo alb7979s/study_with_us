@@ -17,7 +17,7 @@ public class Study {
     @Column(name = "study_id")
     private Long id;
 
-    @Column(name = "study_name")
+    @Column(name = "study_name", nullable = false)
     private String studyName;
     @Column(name = "study_intro", columnDefinition = "TEXT")
     private String studyIntro;
