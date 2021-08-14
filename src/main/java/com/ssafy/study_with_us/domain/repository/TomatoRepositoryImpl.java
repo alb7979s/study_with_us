@@ -46,6 +46,10 @@ public class TomatoRepositoryImpl implements TomatoRepositoryCustom {
     public List<Tomato> getTomatoes(TomatoDto params) {
         return jpaQueryFactory.selectFrom(tomato).where(studyIdEq(params.getStudyId())).fetch();
     }
+    @Override
+    public List<Tomato> getTodayTomatoes(TomatoDto params) {
+        return jpaQueryFactory.selectFrom(tomato).where(studyIdEq(params.getStudyId()), tomatoDateEq(LocalDate.now())).fetch();
+    }
 
     @Override
     public Integer getTotalSum() {

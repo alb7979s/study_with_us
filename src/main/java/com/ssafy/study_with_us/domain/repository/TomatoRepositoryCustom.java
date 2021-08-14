@@ -13,4 +13,5 @@ public interface TomatoRepositoryCustom {
     Integer getRelevantSum(Long memberId);
     List<Tomato> getTomatoes(Long memberId);
     List<Tomato> getTomatoes(TomatoDto params);
+    List<Tomato> getTodayTomatoes(TomatoDto params);
 }
