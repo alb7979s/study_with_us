@@ -39,10 +39,18 @@ public class StudyMemberRefRepositoryImpl implements StudyMemberRefRepositoryCus
         return jpaQueryFactory.selectFrom(studyMemberRef).where(memberIdEq(memberId), studyMemberRef.recentlyConnectionTime.isNotNull()).orderBy(studyMemberRef.recentlyConnectionTime.desc()).limit(recentlyPagingSize).fetch();
     }
 
+    @Override
+    public List<StudyMemberRef> getConnectionList(Long studyId) {
+        return jpaQueryFactory.selectFrom(studyMemberRef).where(studyIdEq(studyId), connectedEq(true)).fetch();
+    }
+
     private BooleanExpression studyIdEq(Long studyId){
         return studyId == null ? null : studyMemberRef.study.id.eq(studyId);
     }
     private BooleanExpression memberIdEq(Long memberId){
         return memberId == null ? null : studyMemberRef.member.id.eq(memberId);
+    }
+    private BooleanExpression connectedEq(Boolean connected){
+        return connected == null ? null : studyMemberRef.connected.eq(connected);
     }
 }

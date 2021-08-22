@@ -3,6 +3,7 @@ package com.ssafy.study_with_us.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Getter
@@ -10,6 +11,7 @@ public class StudyTimeDto {
 
     private Long studyTimeId;
     private LocalDate studyDate;
+    @NotNull
     private Long studyTime;
     private Long memberId;
 

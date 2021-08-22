@@ -65,7 +65,7 @@ public class MailService {
                             "        감사합니다.<br/>"                                                                                                                                                                           +
                             "	</p>"																																																	+
                             "	<a style=\"color: #FFF; text-decoration: none; text-align: center;\""																																	+
-                            "	href='http://localhost:5001\" 'target=\"_blank\">"																							+
+                            "	href='http://i5b106.p.ssafy.io:5001\" 'target=\"_blank\">"																							+
                             "		<p"																																																	+
                             "			style=\"display: inline-block; width: 210px; height: 45px; margin: 30px 5px 40px; background: red; line-height: 45px; vertical-align: middle; font-size: 16px;\">"							+
                             "			Sweet Tomato 바로가기</p>"																																												+

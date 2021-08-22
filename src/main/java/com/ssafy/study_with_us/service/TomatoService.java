@@ -83,6 +83,15 @@ public class TomatoService {
         }
         return results;
     }
+
+    public List<TomatoPlanDto> getTodayGoal(Long studyId){
+        List<TomatoPlan> tomatoPlans = tomatoPlanRepository.getByStudyIdAndTomatoDateEquals(studyId, LocalDate.now());
+        List<TomatoPlanDto> results = new ArrayList<>();
+        for (TomatoPlan tomatoPlan : tomatoPlans) {
+            results.add(tomatoPlan.entityToDto());
+        }
+        return results;
+    }
     private List<TomatoDto> getTomatoDtos(List<Tomato> tomatoes) {
         List<TomatoDto> results = new ArrayList<>();
         for (Tomato tomato : tomatoes) {

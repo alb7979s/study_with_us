@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -26,7 +27,6 @@ public class Study {
     @Column(name = "security")
     private String security;
 
-//  얘도 방향관계 확실치 않아서 생성자에 추가 안했어요
     @OneToOne
     @JoinColumn(name = "profile_id")
     private StudyProfile profile;
@@ -62,8 +62,9 @@ public class Study {
         return StudyDto.builder().id(id).studyName(studyName).studyIntro(studyIntro).studyLeader(studyLeader)
                 .security(security).profile(profile == null ? null : profile.entityToDto()).build();
     }
-    public Set<String> listToSet(){
-        Set<String> results = new HashSet<>();
+
+    public List<String> getThemesString() {
+        List<String> results = new ArrayList<>();
         for (StudyThemeRef theme : themes) {
             results.add(theme.getTheme().getThemeName());
         }

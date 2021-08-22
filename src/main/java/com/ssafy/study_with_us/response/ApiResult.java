@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class ApiResult<T> {
-    private int status;
     private String message;
+    private int status;
     private String dataType;
     private T data;
 

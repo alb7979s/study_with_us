@@ -6,7 +6,9 @@ import com.ssafy.study_with_us.service.DataRoomService;
 import com.ssafy.study_with_us.response.ApiResult;
 import com.ssafy.study_with_us.response.ResponseMessage;
 import com.ssafy.study_with_us.response.StatusCode;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.json.JSONObject;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -21,12 +23,14 @@ public class DataRoomController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public Object create(FileReqDto params) throws IOException {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.CREATED_DATA_ROOM).dataType("data_room")
         .data(dataRoomService.create(getDataRoomDtoAtFile(params), params.getFiles())).build();
     }
     @PatchMapping
-    public Object update(FileReqDto params) throws IOException {
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public Object update(FileReqDto params) throws IOException, AuthenticationException {
         return ApiResult.builder().status(StatusCode.OK).message(ResponseMessage.UPDATED_DATA_ROOM).dataType("data_room")
         .data(dataRoomService.update(getDataRoomDtoAtFile(params), params.getFiles())).build();
     }

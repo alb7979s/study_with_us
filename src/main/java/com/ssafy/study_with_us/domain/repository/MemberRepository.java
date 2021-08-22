@@ -1,6 +1,7 @@
 package com.ssafy.study_with_us.domain.repository;
 
 import com.ssafy.study_with_us.domain.entity.Member;
+import com.ssafy.study_with_us.dto.MemberDto;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

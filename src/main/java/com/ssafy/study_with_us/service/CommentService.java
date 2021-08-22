@@ -6,6 +6,7 @@ import com.ssafy.study_with_us.domain.repository.MemberRepository;
 import com.ssafy.study_with_us.domain.repository.StudyRepository;
 import com.ssafy.study_with_us.dto.CommentDto;
 import com.ssafy.study_with_us.util.SecurityUtil;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,8 +35,8 @@ public class CommentService {
     }
 
     @Transactional
-    public Object update(CommentDto params) {
-        Comment comment = commentRepository.getById(params.getCommentId());
+    public Object update(CommentDto params) throws AuthenticationException {
+        Comment comment = authCheck(params);
         Comment result = commentRepository.save(Comment.builder()
                 .id(params.getCommentId())
                 .content(params.getContent() == null ? comment.getContent() : params.getContent())
@@ -47,9 +48,11 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(CommentDto params) {
+    public void delete(CommentDto params) throws AuthenticationException {
+        authCheck(params);
         commentRepository.delete(commentRepository.getById(params.getCommentId()));
     }
+
 
     public Object getComments(Long studyId){
         List<Comment> comments = commentRepository.getByStudy(studyRepository.getById(studyId));
@@ -59,6 +62,13 @@ public class CommentService {
         }
         return results;
     }
+
+    private Comment authCheck(CommentDto params) throws AuthenticationException {
+        Comment comment = commentRepository.getById(params.getCommentId());
+        if (comment.getMember().getId() != getMemberId()) throw new AuthenticationException("해당 댓글 작성자만 삭제 가능합니다.");
+        return comment;
+    }
+
     private Long getMemberId() {
         String s = SecurityUtil.getCurrentUsername().get();
         return memberRepository.findByEmail(s).get().getId();

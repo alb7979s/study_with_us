@@ -6,21 +6,27 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public enum ErrorCode {
 
     // Common
-    INVALID_INPUT_VALUE(400, "C001", " Invalid Input Value"),
-    METHOD_NOT_ALLOWED(405, "C002", " Invalid Input Value"),
-    ENTITY_NOT_FOUND(400, "C003", " Entity Not Found"),
+    INVALID_INPUT_VALUE(400, "C001", "Invalid Input Value"),
+    METHOD_NOT_ALLOWED(405, "C002", "Method Not Allowed"),
+    ENTITY_NOT_FOUND(400, "C003", "Entity Not Found"),
     INTERNAL_SERVER_ERROR(500, "C004", "Server Error"),
-    INVALID_TYPE_VALUE(400, "C005", " Invalid Type Value"),
-    HANDLE_ACCESS_DENIED(403, "C006", "Access is Denied"),
-
+    INVALID_TYPE_VALUE(400, "C005", "Invalid Type Value"),
+    HANDLE_ACCESS_DENIED(403, "C006", "접근이 거부되었습니다."),
+    ACCESS_DENIED(400, "C007", "작성자만 수정/삭제 가능합니다."),
 
     // Member
-    EMAIL_DUPLICATION(400, "M001", "Email is Duplication"),
-    LOGIN_INPUT_INVALID(400, "M002", "Login input is invalid"),
+    EMAIL_DUPLICATION(400, "M001", "이메일이 중복되었습니다."),
+    FILE_FORMAT_ERROR(400, "M002", "파일 형식이 맞지 않습니다."),
+    EMAIL_NOT_FOUNDED(400, "M003", "이메일을 찾을 수 없습니다."),
 
-    // Coupon
-    COUPON_ALREADY_USE(400, "CO001", "Coupon was already used"),
-    COUPON_EXPIRE(400, "CO002", "Coupon was already expired")
+    // Profile
+    PROFILE_NOT_FOUNDED(400, "P001", "프로필이 존재하지 않습니다."),
+
+    // File
+    FILE_NOT_FOUNDED(400, "F001", "파일이 존재하지 않습니다."),
+
+    //blacklist
+    BLACKLIST_ACCESS_DENIED(400, "B001", "해당 권한은 스터디장만 가능합니다."),
 
     ;
     private final String code;

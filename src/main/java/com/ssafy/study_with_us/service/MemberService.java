@@ -10,6 +10,7 @@ import com.ssafy.study_with_us.domain.repository.StudyMemberRefRepository;
 import com.ssafy.study_with_us.domain.repository.StudyTimeRepository;
 import com.ssafy.study_with_us.dto.MemberDto;
 import com.ssafy.study_with_us.dto.StudyTimeDto;
+import com.ssafy.study_with_us.error.exception.InvalidValueException;
 import com.ssafy.study_with_us.util.SecurityUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MemberService {

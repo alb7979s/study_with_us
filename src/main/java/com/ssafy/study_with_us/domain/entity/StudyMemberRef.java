@@ -1,7 +1,7 @@
 package com.ssafy.study_with_us.domain.entity;
 
-import com.ssafy.study_with_us.dto.MemberDto;
 import com.ssafy.study_with_us.dto.StudyMemberDto;
+import com.ssafy.study_with_us.dto.StudyMemberRefDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,6 +19,10 @@ public class StudyMemberRef {
     @Column(name = "study_member_ref_id")
     private Long id;
 
+    private String nickname;
+
+    private Boolean connected;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -34,24 +38,21 @@ public class StudyMemberRef {
     }
 
     @Builder
-    public StudyMemberRef(Long id, Member member, Study study, LocalDateTime recentlyConnectionTime) {
+    public StudyMemberRef(Long id, String nickname, Boolean connected, Member member, Study study, LocalDateTime recentlyConnectionTime) {
         this.id = id;
+        this.nickname = nickname;
+        this.connected = connected;
         this.member = member;
         this.study = study;
         this.recentlyConnectionTime = recentlyConnectionTime;
     }
 
-    @Override
-    public String toString() {
-        return "StudyMemberRef{" +
-                "id=" + id +
-                ", member=" + member +
-                ", study=" + study +
-                ", recentlyConnectionTime=" + recentlyConnectionTime +
-                '}';
-    }
     public StudyMemberDto entityToDto(){
-        return StudyMemberDto.builder().id(id).member(member.entityToDto())
+        return StudyMemberDto.builder().id(id).nickname(nickname).member(member.entityToDto())
                 .study(study.entityToDto()).recentlyConnectionTime(recentlyConnectionTime).build();
+    }
+    public StudyMemberRefDto entityToRefDto(){
+        return StudyMemberRefDto.builder().id(id).nickname(nickname).connected(connected).memberId(member.getId())
+                .studyId(study.getId()).recentlyConnectionTime(recentlyConnectionTime).build();
     }
 }

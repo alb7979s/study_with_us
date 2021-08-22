@@ -6,32 +6,35 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class StudyMemberDto {
+public class StudyMemberRefDto {
     private Long id;
     private String nickname;
-    private StudyDto study;
-    private MemberDto member;
+    private Boolean connected;
+    private Long studyId;
+    private Long memberId;
     private LocalDateTime recentlyConnectionTime;
 
-    public StudyMemberDto() {
+    public StudyMemberRefDto() {
     }
 
     @Builder
-    public StudyMemberDto(Long id, String nickname, StudyDto study, MemberDto member, LocalDateTime recentlyConnectionTime) {
+    public StudyMemberRefDto(Long id, String nickname, Boolean connected, Long studyId, Long memberId, LocalDateTime recentlyConnectionTime) {
         this.id = id;
         this.nickname = nickname;
-        this.study = study;
-        this.member = member;
+        this.connected = connected;
+        this.studyId = studyId;
+        this.memberId = memberId;
         this.recentlyConnectionTime = recentlyConnectionTime;
     }
 
     @Override
     public String toString() {
-        return "StudyMemberDto{" +
+        return "StudyMemberRefDto{" +
                 "id=" + id +
                 ", nickname='" + nickname + '\'' +
-                ", study=" + study +
-                ", member=" + member +
+                ", connected=" + connected +
+                ", studyId=" + studyId +
+                ", memberId=" + memberId +
                 ", recentlyConnectionTime=" + recentlyConnectionTime +
                 '}';
     }

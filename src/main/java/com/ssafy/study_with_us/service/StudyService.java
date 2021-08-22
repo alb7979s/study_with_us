@@ -4,6 +4,7 @@ import com.ssafy.study_with_us.domain.entity.*;
 import com.ssafy.study_with_us.domain.repository.*;
 import com.ssafy.study_with_us.dto.*;
 import com.ssafy.study_with_us.util.SecurityUtil;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -39,11 +40,16 @@ public class StudyService {
         this.pagingSize = pagingSize;
     }
 
-    // 가입, params.memberId null이면 직접 가입 => 토큰에서 정보 얻어옴, null이 아니면 초대 => 받은 아이디 정보로 가입
-    public StudyMemberDto joinMember(IdReqDto params){
+    // 가입, params.memberId null이면 직접 가입 => 토큰에서 정보 얻어옴, null 아니면 초대 => 받은 아이디 정보로 가입
+    public StudyMemberDto joinMember(IdReqDto params) throws AuthenticationException {
+        Study study = studyRepository.getById(params.getStudyId());
+        // 초대시 스터디 장 아니면 예외 처리
+        if(params.getMemberId() != null && getMemberId() != study.getStudyLeader()){
+            throw new AuthenticationException("스터디 장만 초대 가능합니다.");
+        }
         StudyMemberRef studyMemberRef = studyMemberRefRepository.save(StudyMemberRef.builder()
                 .member(memberRepository.getById(params.getMemberId() == null ? getMemberId() : params.getMemberId()))
-                .study(studyRepository.getById(params.getStudyId()))
+                .study(study)
                 .build());
         return StudyMemberDto.builder()
                 .id(studyMemberRef.getId())
@@ -78,18 +84,18 @@ public class StudyService {
     }
 
     // 여기 insert, delete 모듈화 가능할듯 일단 돌아가게 만들고 후에 수정
-    @Transactional
-    public StudyDto update(FileReqDto params) throws IOException {
+    @Transactional(rollbackFor = {IOException.class, AuthenticationException.class})
+    public StudyDto update(FileReqDto params) throws IOException, AuthenticationException {
         Study study = saveStudyAtFile(params);
-
-        Set<String> getThemes = new HashSet<>();
+        if(study.getStudyLeader() != getMemberId()) throw new AuthenticationException("스터디 장만 수정 가능합니다.");
+        List<String> getThemes = new ArrayList<>();
         for (Theme theme : studyRepository.getThemes(study.getId())) {
             getThemes.add(theme.getThemeName());
         }
-        Set<String> paramThemes = getThemes(params);
+        List<String> paramThemes = getThemes(params);
 
-        Set<String> insertThemes = new HashSet<>();
-        Set<String> deleteThemes = new HashSet<>();
+        List<String> insertThemes = new ArrayList<>();
+        List<String> deleteThemes = new ArrayList<>();
         for (String paramTheme : paramThemes) {
             if(!getThemes.contains(paramTheme)) insertThemes.add(paramTheme);
         }
@@ -106,7 +112,7 @@ public class StudyService {
         Study study = studyRepository.getById(studyId);
         // themes 얻어오기
         List<Theme> getThemes = studyRepository.getThemes(studyId);
-        Set<String> themes = new HashSet<>();
+        List<String> themes = new ArrayList<>();
         for (Theme getTheme : getThemes) {
             themes.add(getTheme.getThemeName());
         }
@@ -140,7 +146,7 @@ public class StudyService {
             results.add(StudyDto.builder().id(study.getId()).studyName(study.getStudyName())
                     .studyLeader(study.getStudyLeader()).security(study.getSecurity())
                     .studyIntro(study.getStudyIntro())
-                    .themes(study.listToSet())
+                    .themes(study.getThemesString())
                     .profile(profile == null ? null :profile.entityToDto())
                     .build());
         }
@@ -148,16 +154,16 @@ public class StudyService {
         map.put("totalPage", totalPage);
         return map;
     }
-    private void removeThemes(Set<String> deleteThemes, Study study) {
+    private void removeThemes(List<String> deleteThemes, Study study) {
         for (String deleteTheme : deleteThemes) {
             studyRepository.remove(deleteTheme, study.getId());
         }
     }
 
-    private void makeThemes(Set<String> getThemes, Study study) {
-        // DB에 있는 theme 목록 가져와서 set으로
+    private void makeThemes(List<String> getThemes, Study study) {
+        // DB에 있는 theme 목록 가져와서 set으로 => 순서 유지 요청 들어와서 list로 변경
         List<Theme> themeList = studyRepository.getThemes();
-        Set<String> themes = new HashSet<>();
+        List<String> themes = new ArrayList<>();
         for (Theme theme : themeList) {
             themes.add(theme.getThemeName());
         }
@@ -185,14 +191,35 @@ public class StudyService {
         return map;
     }
 
-    public StudyMemberDto connectStudy(Long studyId){
+    public StudyMemberRefDto connectStudy(StudyMemberRefDto params){
+        StudyMemberRef studyMember = studyMemberRefRepository.getStudyMember(getMemberId(), params.getStudyId());
+        return studyMemberRefRepository.save(StudyMemberRef.builder().id(studyMember.getId())
+                .nickname(params.getNickname())
+                .connected(true)
+                .member(studyMember.getMember())
+                .study(studyMember.getStudy()).recentlyConnectionTime(LocalDateTime.now()).build()).entityToRefDto();
+    }
+
+    @Transactional
+    public StudyMemberRefDto disConnect(Long studyId){
         StudyMemberRef studyMember = studyMemberRefRepository.getStudyMember(getMemberId(), studyId);
-        StudyMemberRef result = studyMemberRefRepository.save(StudyMemberRef.builder().id(studyMember.getId()).member(studyMember.getMember())
-                .study(studyMember.getStudy()).recentlyConnectionTime(LocalDateTime.now()).build());
-        return StudyMemberDto.builder().id(result.getId())
-                .study(result.getStudy().entityToDto())
-                .member(result.getMember().entityToDto())
-                .recentlyConnectionTime(result.getRecentlyConnectionTime()).build();
+        return studyMemberRefRepository.save(StudyMemberRef.builder()
+                .id(studyMember.getId())
+                .nickname(studyMember.getNickname())
+                .connected(false)
+                .recentlyConnectionTime(studyMember.getRecentlyConnectionTime())
+                .member(studyMember.getMember())
+                .recentlyConnectionTime(studyMember.getRecentlyConnectionTime())
+                .study(studyMember.getStudy()).build()).entityToRefDto();
+    }
+
+    public List<StudyMemberRefDto> getConnectionList(Long studyId){
+        List<StudyMemberRef> connectionList = studyMemberRefRepository.getConnectionList(studyId);
+        List<StudyMemberRefDto> results = new ArrayList<>();
+        for (StudyMemberRef studyMemberRef : connectionList) {
+            results.add(studyMemberRef.entityToRefDto());
+        }
+        return results;
     }
 
     public List<StudyMemberDto> getRecentlyStudies(){
@@ -242,9 +269,9 @@ public class StudyService {
                 .build());
     }
 
-    private Set<String> getThemes(FileReqDto params){
+    private List<String> getThemes(FileReqDto params){
         JSONObject jObject = new JSONObject(params.getJsonData());
-        Set<String> themes = new HashSet<>();
+        List<String> themes = new ArrayList<>();
 
         if (jObject.has("themes")){
             for (Object theme : jObject.getJSONArray("themes")) {
@@ -253,14 +280,18 @@ public class StudyService {
         }
         return themes;
     }
-    //  image파일 아니면 에러 처리 해줘야함
     private Study saveStudyAtFile(FileReqDto params) throws IOException {
         JSONObject jObject = new JSONObject(params.getJsonData());
         Long deletedProfileId = null;
+        Study study = null;
         if(jObject.has("studyId")) {
-            deletedProfileId = studyRepository.getById(jObject.getLong("studyId")).getProfile().getId();
+            study = studyRepository.getById(jObject.getLong("studyId"));
+            Profile prevProfile = study.getProfile();
+            if(prevProfile != null) {
+                deletedProfileId = prevProfile.getId();
+            }
         }
-        Profile profile = profileService.studyProfileCreate(params.getFiles().get(0));
+        Profile profile = profileService.studyProfileCreate(params.getFiles().size() > 0 ? params.getFiles().get(0) : null);
         if(deletedProfileId != null) {
             profileRepository.deleteById(deletedProfileId);
         }
@@ -269,7 +300,7 @@ public class StudyService {
                 .id(jObject.has("studyId") ? jObject.getLong("studyId") : null)
                 .studyName(jObject.has("studyName") ? jObject.getString("studyName") : null)
                 .studyIntro(jObject.has("studyIntro") ? jObject.getString("studyIntro") : null)
-                .studyLeader(getMemberId())
+                .studyLeader(study == null ? getMemberId(): study.getStudyLeader())
                 .security(jObject.has("security") ? jObject.getString("security") : null)
                 .profile(profile == null ? null : (StudyProfile) profile)
                 .build());

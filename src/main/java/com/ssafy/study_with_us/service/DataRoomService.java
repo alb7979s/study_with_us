@@ -7,6 +7,7 @@ import com.ssafy.study_with_us.domain.repository.StudyRepository;
 import com.ssafy.study_with_us.dto.DataRoomDto;
 import com.ssafy.study_with_us.dto.FileDto;
 import com.ssafy.study_with_us.util.SecurityUtil;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,6 +30,7 @@ public class DataRoomService {
         this.fileService = fileService;
     }
 
+    @Transactional(rollbackFor = IOException.class)
     public DataRoomDto create(DataRoomDto params, List<MultipartFile> files) throws IOException {
         // 자료실(글) 저장
         DataRoom dataRoom = saveDataRoom(params);
@@ -38,8 +40,9 @@ public class DataRoomService {
     }
 
     @Transactional
-    public DataRoomDto update(DataRoomDto params, List<MultipartFile> files) throws IOException {
+    public DataRoomDto update(DataRoomDto params, List<MultipartFile> files) throws IOException, AuthenticationException {
         DataRoom getDataRoom = dataRoomRepository.getById(params.getId());
+        if(getDataRoom.getMember().getId() != getMemberId()) throw new AuthenticationException("해당 글 작성자만 수정 가능합니다.");
         DataRoom dataRoom = saveDataRoom(DataRoomDto.builder()
                 .id(getDataRoom.getId())
                 .subject(params.getSubject() == null ? getDataRoom.getSubject() : params.getSubject())

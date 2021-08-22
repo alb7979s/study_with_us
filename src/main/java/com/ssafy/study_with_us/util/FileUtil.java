@@ -2,15 +2,12 @@ package com.ssafy.study_with_us.util;
 
 import com.ssafy.study_with_us.domain.entity.DataRoom;
 import com.ssafy.study_with_us.domain.entity.FileEntity;
-import com.ssafy.study_with_us.dto.FileDto;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,8 +18,9 @@ import java.util.UUID;
 @Component
 public class FileUtil {
 
-    public File makeDir(String loc) {
+    public File makeDir(String loc) throws IOException {
         String uploadRoot = "c:/sweet_tomato/upload";
+    //    String uploadRoot = "c:/sweet_tomato/upload";
         String path = loc + new SimpleDateFormat("/yyyy/MM/dd").format(new Date());
         File file = new File(uploadRoot + path);
         if(!file.exists()) file.mkdirs();
@@ -65,7 +63,7 @@ public class FileUtil {
             mf.transferTo(f);
             // db 저장
             String contentType = getType(orgName);
-            fileEntities.add(FileEntity.builder().sysName(f.getName()).orgName(orgName).path(f.getParent() + "\\")
+            fileEntities.add(FileEntity.builder().sysName(f.getName()).orgName(orgName).path(f.getParent() + "/")
                     .fileSize(mf.getSize()).fileType(contentType).regTime(LocalDateTime.now()).dataRoom(dataRoom).build());
         }
         return fileEntities;
