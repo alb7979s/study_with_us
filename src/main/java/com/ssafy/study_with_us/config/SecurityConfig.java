@@ -50,10 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers(
-                        "/favicon.ico"
-                        ,"/error"
-                );
+                .antMatchers("/favicon.ico","/error")
+                //swagger
+                .antMatchers( "/v2/api-docs", "/configuration/ui", "/swagger-resources", "/configuration/security", "/swagger-ui.html", "/webjars/**","/swagger/**");
     }
 
     @Override
@@ -81,7 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/auth/login").permitAll()
                 .antMatchers("/member/join").permitAll()
                 .antMatchers("/member/pwdSearch").permitAll()
@@ -94,6 +93,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/img/**").permitAll()
                 .antMatchers("/profile/**").permitAll()
                 .antMatchers("/file/**").permitAll()
+
                 .anyRequest().authenticated()
 
                 .and()

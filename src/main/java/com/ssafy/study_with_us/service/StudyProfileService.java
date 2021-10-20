@@ -1,5 +1,7 @@
-package com.ssafy.study_with_us.domain.entity;
+package com.ssafy.study_with_us.service;
 
+import com.ssafy.study_with_us.domain.entity.StudyProfile;
+import com.ssafy.study_with_us.domain.repository.StudyProfileRepository;
 import com.ssafy.study_with_us.dto.ProfileDto;
 import org.springframework.stereotype.Service;
 

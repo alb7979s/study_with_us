@@ -19,7 +19,7 @@ import java.util.UUID;
 public class FileUtil {
 
     public File makeDir(String loc) throws IOException {
-        String uploadRoot = "c:/sweet_tomato/upload";
+        String uploadRoot = "c:/study_with_us/";
     //    String uploadRoot = "c:/sweet_tomato/upload";
         String path = loc + new SimpleDateFormat("/yyyy/MM/dd").format(new Date());
         File file = new File(uploadRoot + path);
